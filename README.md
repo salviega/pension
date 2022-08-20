@@ -2,13 +2,13 @@
 
 Pension: Ethereum Developer Program - Plazti
 
-### Despliegue Vercel
+### Vercel deploy
 
 Vercel url: https://pension-frontend.vercel.app/
 
 ## Quick start 🏄
 
-Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) y [Git](https://git-scm.com/downloads)
+Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) and [Git](https://git-scm.com/downloads)
 
 > Clone the repository:
 
