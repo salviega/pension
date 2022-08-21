@@ -1,8 +1,8 @@
 import './PensionWallet.scss'
 import React from 'react';
 import { ethers } from 'ethers'
-import abiProofOfHumanity from '../../blockchain/environment/ProofOfHumanity/abi-proof-of-humanity.json'
-import addressProofOfHumanity from '../../blockchain/environment/ProofOfHumanity/address-proof-of-humanity.json'
+import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json'
+import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json'
 
 function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet')
@@ -38,16 +38,14 @@ function PensionWallet() {
 
   const verifyInProofOfHumanity = async (wallet) => {
     const provider = ethers.providers.getDefaultProvider('mainnet')
-    const proofOfHumanityContract = new ethers.Contract(addressProofOfHumanity.proofofhumanity, abiProofOfHumanity, provider)
+    const proofOfHumanityContract = new ethers.Contract(proofOfHumanityAddress.proofofhumanity, proofOfHumanityAbi, provider)
     return await proofOfHumanityContract.isRegistered(wallet) //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
   }
 
   return (
-    <React.Fragment>
-      <button onClick={connectWallet}>
+      <button className='wallet' onClick={connectWallet}>
           {loading ? 'Loading...' : addressWallet}
       </button>
-    </ React.Fragment>
   )
 }
 
