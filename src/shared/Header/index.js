@@ -23,7 +23,7 @@ function Header(props) {
           <li className='main-nav__item'>
             <a href='./about' >About</a>
           </li>
-          {isVerified && isRegisted && <li className='main-nav__item'>
+          {isVerified && !isRegisted && <li className='main-nav__item'>
             <a href='/contribute' >
               Contribute
             </a>

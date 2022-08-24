@@ -1,0 +1,24 @@
+.spinner {
+  animation: spinner 1.65s linear infinite;
+  border: 5px solid #eaf0f6;
+  border-radius: 1.5px;
+  border-radius: 55%;
+  border-top: 5px solid #212121;;
+  bottom: 0;
+  height: 55px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 55px;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

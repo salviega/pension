@@ -9,6 +9,7 @@ import { PensionMyPension } from "../PensionMyPension";
 import { PensionAbout } from "../PensionAbout";
 import { PensionRegister } from "../PensionRegister";
 import { PensionContribute } from "../PensionContribute";
+import { PensionLoading } from '../PensionLoading';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <PensionWallet />
       </Header>
       <main>
+        <PensionLoading/>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<PensionHome />} />

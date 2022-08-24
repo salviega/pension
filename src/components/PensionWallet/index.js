@@ -7,7 +7,7 @@ import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humani
 function PensionWallet(props) {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet')
   const [loading, setLoading] = React.useState(false)
-
+  
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       setLoading(true)
@@ -16,7 +16,6 @@ function PensionWallet(props) {
       const wallet = accounts[0]
       
       const verification = await verifyInProofOfHumanity(wallet)
-      //console.log('verify :', verification)
       if (verification) {
         const web3Signer = web3Provider.getSigner()
         const chanId = await web3Signer.getChainId()
@@ -41,7 +40,7 @@ function PensionWallet(props) {
   const verifyInProofOfHumanity = async (wallet) => {
     const provider = ethers.providers.getDefaultProvider('mainnet')
     const proofOfHumanityContract = new ethers.Contract(proofOfHumanityAddress.proofofhumanity, proofOfHumanityAbi, provider)
-    return await proofOfHumanityContract.isRegistered('0x918BD890FF76D2da0089Dbb086d258Da75960119') //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
+    return await proofOfHumanityContract.isRegistered('0x1ddd73d60f92f4440377e27e9eecf8ea4c275ef6') //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
   }
 
   return (
