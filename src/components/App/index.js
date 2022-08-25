@@ -1,18 +1,20 @@
-import "./App.scss";
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Header } from "../../shared/Header";
-import { Footer } from "../../shared/Footer";
-import { PensionWallet } from "../PensionWallet";
-import { PensionHome } from "../PensionHome";
-import { PensionMyPension } from "../PensionMyPension";
-import { PensionAbout } from "../PensionAbout";
-import { PensionRegister } from "../PensionRegister";
-import { PensionContribute } from "../PensionContribute";
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { Header } from '../../shared/Header';
+import { Footer } from '../../shared/Footer';
+import { PensionWallet } from '../PensionWallet';
+import { PensionHome } from '../PensionHome';
+import { PensionMyPension } from '../PensionMyPension';
+import { PensionAbout } from '../PensionAbout';
+import { PensionRegister } from '../PensionRegister';
+import { PensionContribute } from '../PensionContribute';
+
+import './App.scss';
 
 function App() {
   return (
-    <React.Fragment>
+    <div className="App__container">
       <Header>
         <PensionWallet />
       </Header>
@@ -28,7 +30,7 @@ function App() {
         </BrowserRouter>
       </main>
       <Footer />
-    </React.Fragment>
+    </div>
   );
 }
 

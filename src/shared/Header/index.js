@@ -10,7 +10,7 @@ function Header(props) {
   }, [])
 
   return(
-    <header>
+    <header className='Header'>
       <nav>
         <ul className='main-nav'>
           <figure className='main-nav__logo'>
