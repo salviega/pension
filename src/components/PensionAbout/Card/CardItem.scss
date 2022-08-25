@@ -8,11 +8,12 @@
   border-radius: 1rem;
   filter: grayscale(30%);
   overflow: hidden;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: box-shadow, transform 0.2s ease-in-out;
 
   &:hover {
     cursor: pointer;
-    box-shadow: -4px 12px 40px -10 rgba(30, 30, 30, 0.50);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    transform: scale(1.01);
   }
   &__layer {
     height: 100%;
