@@ -1,0 +1,41 @@
+.Card {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+
+  position: relative;
+
+  border-radius: 1rem;
+  filter: grayscale(30%);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: -4px 12px 40px -10 rgba(30, 30, 30, 0.50);
+  }
+  &__layer {
+    height: 100%;
+    width: 100%;
+    background-color: rgba($color: #fff, $alpha: 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 0;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  &__name {
+    margin: 0;
+  }
+  &__role {
+    font-size: 0.9rem;
+  }
+}
