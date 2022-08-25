@@ -16,12 +16,12 @@ import './App.scss';
 function App() {
   return (
     <div className="App__container">
-      <Header>
-        <PensionWallet />
-      </Header>
-      <main>
-        <PensionLoading/>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Header>
+          <PensionWallet />
+        </Header>
+        <main>
+          <PensionLoading />
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
@@ -29,9 +29,9 @@ function App() {
             <Route path="/contribute" element={<PensionContribute />} />
             <Route path="/register" element={<PensionRegister />} />
           </Routes>
-        </BrowserRouter>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 }

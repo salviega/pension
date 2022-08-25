@@ -1,5 +1,6 @@
 import './Header.scss'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 function Header(props) {
   const [isRegisted, setIsRegisted] = React.useState(false)
@@ -18,25 +19,25 @@ function Header(props) {
             <figcaption>Pension</figcaption>
           </figure>
           <li className='main-nav__item'>
-            <a href='./' >Home</a>
+            <NavLink to='/' >Home</NavLink>
           </li>
           <li className='main-nav__item'>
-            <a href='./about' >About</a>
+            <NavLink to='/about' >About</NavLink>
           </li>
           {isVerified && !isRegisted && <li className='main-nav__item'>
-            <a href='/contribute' >
+            <NavLink to='/contribute' >
               Contribute
-            </a>
+            </NavLink>
           </li>}
           {isVerified && isRegisted  && <li className='main-nav__item'>
-            <a href='/mypension' >
+            <NavLink to='/mypension' >
                 My pension
-            </a>
+            </NavLink>
           </li>}
           {isVerified && !isRegisted && <li className='main-nav__item'>
-            <a href='/register' >
+            <NavLink to='/register' >
                 Register
-            </a>
+            </NavLink>
           </li>}
           <li className='main-nav__item'>
             {React.cloneElement(props.children, {setIsRegisted, setIsVerified})}
