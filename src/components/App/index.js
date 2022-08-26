@@ -15,7 +15,7 @@ import { Modal } from '../../shared/Modal';
 import { useSelector } from 'react-redux';
 
 function App() {
-  const { modal } = useSelector((e) => e.ui);
+  const { modal, spinner } = useSelector((e) => e.ui);
 
   return (
     <div className="App__container">
@@ -24,7 +24,7 @@ function App() {
           <PensionWallet />
         </Header>
         <main>
-          <PensionLoading />
+          {spinner.isActive && <PensionLoading />}
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
