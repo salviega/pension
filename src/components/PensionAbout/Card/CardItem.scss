@@ -40,3 +40,55 @@
     font-size: 0.9rem;
   }
 }
+
+.Content {
+  width: auto;
+  height: auto;
+  max-width: 750px;
+  max-height: 600px;
+  min-width: 300px;
+  min-height: 400px;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: 0 2rem;
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  &__role {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-style: italic;
+  }
+
+  &__body {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 1rem;
+    height: 20rem;
+    overflow-y: auto;
+  }
+
+  &__img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0.5rem;
+  }
+
+  &__description {
+    line-height: 1.7rem;
+    font-style: italic;
+    margin-top: 0;
+  }
+}
+
+hr {
+  height: 0.05rem;
+  background-color: black;
+  opacity: 0.2;
+}
