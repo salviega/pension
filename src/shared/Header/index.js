@@ -17,32 +17,32 @@ function Header(props) {
             <figcaption>Pension</figcaption>
           </figure>
           <li className="main-nav__item">
-            <NavLink to="/" className={({ isActive }) => (isActive && 'active')}>
+            <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
               Home
             </NavLink>
           </li>
           <li className="main-nav__item">
-            <NavLink to="/about" className={({ isActive }) => (isActive && 'active')}>
+            <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
               About
             </NavLink>
           </li>
           {isVerified && !isRegisted && (
             <li className="main-nav__item">
-              <NavLink to="/contribute" className={({ isActive }) => (isActive && 'active')}>
+              <NavLink to="/contribute" className={({ isActive }) => (isActive ? 'active' : '')}>
                 Contribute
               </NavLink>
             </li>
           )}
           {isVerified && isRegisted && (
             <li className="main-nav__item">
-              <NavLink to="/mypension" className={({ isActive }) => (isActive && 'active')}>
+              <NavLink to="/mypension" className={({ isActive }) => (isActive ? 'active' : '')}>
                 My pension
               </NavLink>
             </li>
           )}
           {isVerified && !isRegisted && (
             <li className="main-nav__item">
-              <NavLink to="/register" className={({ isActive }) => (isActive && 'active')}>
+              <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>
                 Register
               </NavLink>
             </li>
