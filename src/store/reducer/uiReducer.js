@@ -5,10 +5,12 @@ const initialState = {
     isOpen: false,
     data: null,
   },
+  spinner: { isActive: false },
 };
 
 export const uiReducer = (state = initialState, action) => {
   switch (action.type) {
+    // * Modal
     case types.uiModalOpen:
       return { ...state, modal: { ...state.modal, isOpen: true } };
 
@@ -20,6 +22,13 @@ export const uiReducer = (state = initialState, action) => {
 
     case types.uiModalUnloadDara:
       return { ...state, modal: { ...state.modal, data: null } };
+
+    // * Sppiner
+    case types.uiSpinnerActive:
+      return { ...state, spinner: { ...state.spinner, isActive: true } };
+
+    case types.uiSpinnerDesactive:
+      return { ...state, spinner: { ...state.spinner, isActive: false } };
 
     default:
       return state;
