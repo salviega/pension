@@ -18,8 +18,8 @@ function App() {
   const { modal, spinner } = useSelector((e) => e.ui);
 
   return (
-    <div className="App__container">
-      <HashRouter>
+    <HashRouter>
+      <div className="App__container">
         <Header>
           <PensionWallet />
         </Header>
@@ -33,9 +33,9 @@ function App() {
           </Routes>
         </main>
         <Footer />
-      </HashRouter>
-      {modal.isOpen && <Modal />}
-    </div>
+        {modal.isOpen && <Modal />}
+      </div>
+    </HashRouter>
   );
 }
 
