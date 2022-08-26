@@ -2,7 +2,7 @@ import "./PensionHome.scss"
 
 function PensionHome() {
   return(
-    <h1>:D</h1>
+    <h1></h1>
    )
 }
 
