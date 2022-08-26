@@ -13,41 +13,43 @@ function Header(props) {
       <nav>
         <ul className="main-nav">
           <figure className="main-nav__logo">
-            <img src="./assets/images/pension.png" alt="logo" />
+            <img src="{./assets/images/pension.png}" alt="logo" />
             <figcaption>Pension</figcaption>
           </figure>
-          <li className="main-nav__item">
-            <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Home
-            </NavLink>
-          </li>
-          <li className="main-nav__item">
-            <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
-              About
-            </NavLink>
-          </li>
-          {isVerified && !isRegisted && (
+          <div className="main-nav__rigth">
             <li className="main-nav__item">
-              <NavLink to="/contribute" className={({ isActive }) => (isActive ? 'active' : '')}>
-                Contribute
+              <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Home
               </NavLink>
             </li>
-          )}
-          {isVerified && isRegisted && (
             <li className="main-nav__item">
-              <NavLink to="/mypension" className={({ isActive }) => (isActive ? 'active' : '')}>
-                My pension
+              <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
+                About
               </NavLink>
             </li>
-          )}
-          {isVerified && !isRegisted && (
-            <li className="main-nav__item">
-              <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>
-                Register
-              </NavLink>
-            </li>
-          )}
-          <li className="main-nav__item">{React.cloneElement(props.children, { setIsRegisted, setIsVerified })}</li>
+            {isVerified && !isRegisted && (
+              <li className="main-nav__item">
+                <NavLink to="/contribute" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Contribute
+                </NavLink>
+              </li>
+            )}
+            {isVerified && isRegisted && (
+              <li className="main-nav__item">
+                <NavLink to="/mypension" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  My pension
+                </NavLink>
+              </li>
+            )}
+            {isVerified && !isRegisted && (
+              <li className="main-nav__item">
+                <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Register
+                </NavLink>
+              </li>
+            )}
+            <li className="main-nav__item">{React.cloneElement(props.children, { setIsRegisted, setIsVerified })}</li>
+          </div>
         </ul>
       </nav>
     </header>
