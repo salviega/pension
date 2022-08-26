@@ -1,4 +1,6 @@
 import './Header.scss';
+import logo from '../../asserts/images/pension.png';
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -13,8 +15,10 @@ function Header(props) {
       <nav>
         <ul className="main-nav">
           <figure className="main-nav__logo">
-            <img src="{./assets/images/pension.png}" alt="logo" />
-            <figcaption>Pension</figcaption>
+            <NavLink to="/" className={({ isActive }) => (isActive ? '' : 'isActive')}>
+              <img src={logo} alt="logo" />
+              <figcaption>Pension</figcaption>
+            </NavLink>
           </figure>
           <div className="main-nav__rigth">
             <li className="main-nav__item">
@@ -27,21 +31,14 @@ function Header(props) {
                 About
               </NavLink>
             </li>
-            {isVerified && !isRegisted && (
+            {isVerified && isRegisted && (
               <li className="main-nav__item">
-                <NavLink to="/contribute" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Contribute
+                <NavLink to="/mypensions" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  My pensions
                 </NavLink>
               </li>
             )}
             {isVerified && isRegisted && (
-              <li className="main-nav__item">
-                <NavLink to="/mypension" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  My pension
-                </NavLink>
-              </li>
-            )}
-            {isVerified && !isRegisted && (
               <li className="main-nav__item">
                 <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>
                   Register

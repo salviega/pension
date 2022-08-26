@@ -11,16 +11,30 @@
   &__logo {
     cursor: pointer;
     float: left;
+    height: 60px;
+    margin: 0;
     margin-left: 10px;
 
-    img {
-      height: 100%;
-      width: 100%;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  
+    img { 
+      border-top-left-radius: 50% 50%; 
+      border-top-right-radius: 50% 50%; 
+      border-bottom-right-radius: 50% 50%; 
+      border-bottom-left-radius: 50% 50%;
+      height: 55px;
+      width: 55px;
     }
 
     figcaption {
       display: inline;
-      text-decoration: none;
+      padding: 17px;
+      padding-left: 8px;
+      position: absolute;
+      text-align: center;
     }
 
     & figcaption::before {
