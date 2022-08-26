@@ -10,28 +10,48 @@ function PensionWallet(props) {
   const [loading, setLoading] = React.useState(false);
 
   const connectWallet = async () => {
+    console.log(window.ethereum)
     if (typeof window.ethereum !== 'undefined') {
-      setLoading(true);
-      const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await web3Provider.send('eth_requestAccounts', []);
-      const wallet = accounts[0];
+      if(addressWallet === 'Connect your Wallet') {
+        setLoading(true);
+        const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await web3Provider.send('eth_requestAccounts', []);
+        const wallet = accounts[0];
 
-      const verification = await verifyInProofOfHumanity(wallet);
-      if (verification) {
-        const web3Signer = web3Provider.getSigner();
-        const chanId = await web3Signer.getChainId();
-        if (chanId !== 4) {
-          alert("Change your network to Rinkeby's testnet!");
+        const verification = await verifyInProofOfHumanity(wallet);
+        if (verification) {
+          const web3Signer = web3Provider.getSigner();
+          const chanId = await web3Signer.getChainId();
+          if (chanId !== 4) {
+            alert("Change your network to Rinkeby's testnet!");
+            setLoading(false);
+            return;
+          }
+          setAdressWallet('...' + String(wallet).slice(38));
           setLoading(false);
-          return;
+          props.setIsRegisted(true);
+          props.setIsVerified(true);
+        } else {
+          alert('Your wallet is not registed in Proof of Humanity');
+          setLoading(false);
         }
-        setAdressWallet('...' + String(wallet).slice(38));
-        setLoading(false);
-        props.setIsRegisted(true);
-        props.setIsVerified(true);
       } else {
-        alert('Your wallet is not registed in Proof of Humanity');
-        setLoading(false);
+        if(window.location.href.includes('mypensions') || window.location.href.includes('register'))
+        {
+          setLoading(true);
+          props.setIsRegisted(false);
+          props.setIsVerified(false);
+          alert('Disconnected ypur wallet');
+          setAdressWallet('Connect your Wallet')
+          setLoading(false);
+          window.location.href = './'
+        } else {
+          setLoading(true);
+          props.setIsRegisted(false);
+          props.setIsVerified(false);
+          setAdressWallet('Connect your Wallet')
+          setLoading(false)
+        }
       }
     } else {
       alert('Install Metamask in your browser');
