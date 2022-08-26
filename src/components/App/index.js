@@ -9,7 +9,6 @@ import { PensionHome } from '../PensionHome';
 import { PensionMyPension } from '../PensionMyPension';
 import { PensionAbout } from '../PensionAbout';
 import { PensionRegister } from '../PensionRegister';
-import { PensionContribute } from '../PensionContribute';
 
 import './App.scss';
 import { Modal } from '../../shared/Modal';
@@ -29,8 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
-            <Route path="/mypension" element={<PensionMyPension />} />
-            <Route path="/contribute" element={<PensionContribute />} />
+            <Route path="/mypensions" element={<PensionMyPension />} />
             <Route path="/register" element={<PensionRegister />} />
           </Routes>
         </main>
