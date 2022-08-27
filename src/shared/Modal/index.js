@@ -1,6 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { closeModalAction, unloadDataModalAction } from '../../store/actions/uiAction';
-import './Modal.scss';
+import { useSelector, useDispatch } from "react-redux";
+import {
+  closeModalAction,
+  unloadDataModalAction,
+} from "../../store/actions/uiAction";
+import "./Modal.scss";
 
 export const Modal = () => {
   const dispatch = useDispatch();
@@ -13,8 +16,9 @@ export const Modal = () => {
   };
 
   return (
-    <article className="Modal" onClick={handleClick}>
-      <div className="Container" onClick={(e) => e.stopPropagation()}>
+    <article className="modal">
+      <div className="modal__container" onClick={(e) => e.stopPropagation()}>
+        <div class="modal__outer" onClick={handleClick} />
         {modal.data}
       </div>
     </article>
