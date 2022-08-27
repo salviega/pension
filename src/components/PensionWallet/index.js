@@ -19,12 +19,12 @@ function PensionWallet() {
 
   const dispatch = useDispatch();
   const { spinner } = useSelector(({ ui }) => ui);
+  const [loading, setLoading] = React.useState(false);
 
   const connectWallet = async () => {
-    console.log(window.ethereum);
     if (typeof window.ethereum !== 'undefined') {
       if (addressWallet === 'Connect your Wallet') {
-        dispatch(activeSpinnerAction());
+        setLoading(true);
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await web3Provider.send('eth_requestAccounts', []);
         const wallet = accounts[0];
@@ -35,11 +35,11 @@ function PensionWallet() {
           const chanId = await web3Signer.getChainId();
           if (chanId !== 4) {
             alert("Change your network to Rinkeby's testnet!");
-            dispatch(desactiveSpinnerAction());
+            setLoading(false);
             return;
           }
           setAdressWallet('...' + String(wallet).slice(38));
-
+          setLoading(false);
           dispatch(authRegistedAction());
           dispatch(authVerifiedAction());
         } else {
@@ -48,20 +48,19 @@ function PensionWallet() {
         }
       } else {
         if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
-          dispatch(activeSpinnerAction());
+          setLoading(true);
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
-
           alert('Disconnected ypur wallet');
-          setAdressWallet('Connect your Wallet');
-          dispatch(desactiveSpinnerAction());
+          setAdressWallet('Connect your Wallet')
+          setLoading(false);
           window.location.href = './';
         } else {
-          dispatch(activeSpinnerAction());
+          setLoading(true);
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
           setAdressWallet('Connect your Wallet');
-          dispatch(desactiveSpinnerAction());
+          setLoading(false)
         }
       }
     } else {
@@ -77,7 +76,7 @@ function PensionWallet() {
 
   return (
     <button className="wallet" onClick={connectWallet}>
-      {spinner.isActive ? 'Loading...' : addressWallet}
+      {loading ? 'Loading...' : addressWallet}
     </button>
   );
 }
