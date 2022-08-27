@@ -4,8 +4,9 @@ pragma solidity >=0.7.0 <=0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./TokenStake.sol";
 
-contract AccessControl is ERC721 {
+contract AccessControl is ERC721, TokenStake {
     using Counters for Counters.Counter;
     
     Counters.Counter public pensionIdCounter;
@@ -28,7 +29,7 @@ contract AccessControl is ERC721 {
     uint256 public pensionCreatedTime;
     uint256 public timeToUpdateAnnualAmount;
     
-    constructor(uint256 _age, uint256 _annualAmount, string memory _biologySex, uint256 _bornAge) ERC721 ("Pension", "PNS") { 
+    constructor(uint256 _age, uint256 _annualAmount, string memory _biologySex, uint256 _bornAge, address _erc20Token) ERC721 ("Pension", "PNS") TokenStake(_erc20Token) { 
         age = _age;
         annualAmount = _annualAmount;
         savingsRegimeAmount = _annualAmount * 27 / 100; // 73%
@@ -106,9 +107,7 @@ contract AccessControl is ERC721 {
         uint256 quote = quoteSolidaryRegimePension(pensionId);
         require(quote < deposits[contributor][pensionId], "Cannot withdraw more that deposited");
         deposits[contributor][pensionId] -= quote;
-        payable(contributor).transfer(quote)
-
-
+        payable(contributor).transfer(quote);
     }
     
     function quoteSolidaryRegimePension(uint256 pensionId) public view returns (uint256) {
