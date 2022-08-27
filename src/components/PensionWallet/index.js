@@ -1,18 +1,28 @@
 import './PensionWallet.scss';
 import React from 'react';
 import { ethers } from 'ethers';
+import { useDispatch } from 'react-redux';
 
 import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
 import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json';
 
-function PensionWallet(props) {
+import {
+  authRegistedAction,
+  authUnregistedAction,
+  authUnverifiedAction,
+  authVerifiedAction,
+} from '../../store/actions/authAction';
+
+function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet');
   const [loading, setLoading] = React.useState(false);
 
+  const dispatch = useDispatch();
+
   const connectWallet = async () => {
-    console.log(window.ethereum)
+    console.log(window.ethereum);
     if (typeof window.ethereum !== 'undefined') {
-      if(addressWallet === 'Connect your Wallet') {
+      if (addressWallet === 'Connect your Wallet') {
         setLoading(true);
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await web3Provider.send('eth_requestAccounts', []);
@@ -29,28 +39,29 @@ function PensionWallet(props) {
           }
           setAdressWallet('...' + String(wallet).slice(38));
           setLoading(false);
-          props.setIsRegisted(true);
-          props.setIsVerified(true);
+
+          dispatch(authRegistedAction());
+          dispatch(authVerifiedAction());
         } else {
           alert('Your wallet is not registed in Proof of Humanity');
           setLoading(false);
         }
       } else {
-        if(window.location.href.includes('mypensions') || window.location.href.includes('register'))
-        {
+        if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
           setLoading(true);
-          props.setIsRegisted(false);
-          props.setIsVerified(false);
+          dispatch(authUnregistedAction());
+          dispatch(authUnverifiedAction());
+
           alert('Disconnected ypur wallet');
-          setAdressWallet('Connect your Wallet')
+          setAdressWallet('Connect your Wallet');
           setLoading(false);
-          window.location.href = './'
+          window.location.href = './';
         } else {
           setLoading(true);
-          props.setIsRegisted(false);
-          props.setIsVerified(false);
-          setAdressWallet('Connect your Wallet')
-          setLoading(false)
+          dispatch(authUnregistedAction());
+          dispatch(authUnverifiedAction());
+          setAdressWallet('Connect your Wallet');
+          setLoading(false);
         }
       }
     } else {
