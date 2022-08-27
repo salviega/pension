@@ -38,8 +38,8 @@ function PensionWallet() {
             setLoading(false);
             return;
           }
-          setAdressWallet('...' + String(wallet).slice(38));
           setLoading(false);
+          setAdressWallet('...' + String(wallet).slice(38));
           dispatch(authRegistedAction());
           dispatch(authVerifiedAction());
         } else {
@@ -51,10 +51,9 @@ function PensionWallet() {
           setLoading(true);
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
-          alert('Disconnected ypur wallet');
+          alert('Disconnected your wallet');
           setAdressWallet('Connect your Wallet')
           setLoading(false);
-          window.location.href = './';
         } else {
           setLoading(true);
           dispatch(authUnregistedAction());

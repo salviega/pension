@@ -6,8 +6,8 @@ import { Footer } from '../../shared/Footer';
 import { PensionLoading } from '../PensionLoading';
 import { PensionWallet } from '../PensionWallet';
 import { PensionHome } from '../PensionHome';
-import { PensionMyPension } from '../PensionMyPension';
 import { PensionAbout } from '../PensionAbout';
+import { PensionMyPensions } from '../PensionMyPensions';
 import { PensionRegister } from '../PensionRegister';
 
 import './App.scss';
@@ -24,11 +24,11 @@ function App() {
           <PensionWallet />
         </Header>
         <main>
-          {spinner.isActive && <PensionLoading />}
+          <PensionLoading />
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
-            <Route path="/mypensions" element={<PensionMyPension />} />
+            <Route path="/mypensions" element={<PensionMyPensions />} />
             <Route path="/register" element={<PensionRegister />} />
           </Routes>
         </main>
