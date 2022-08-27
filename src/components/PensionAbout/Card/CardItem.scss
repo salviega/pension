@@ -92,3 +92,20 @@ hr {
   background-color: black;
   opacity: 0.2;
 }
+
+@media screen and (max-width: 650px) {
+  .Content {
+    &__body {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 30rem;
+    }
+
+    &__img{
+      background-position: top;
+      margin-left: 3rem;
+      margin-right: 3rem;
+      min-height: 120px;
+    }
+  }
+}

@@ -1,12 +1,12 @@
 .App__container {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   width: 1400px;
-  min-height: 644px;
   min-width: 320px;
-  
+
   display: grid;
-  grid-template-rows: 4.5rem 2fr 7rem;
+  grid-template-rows: 4.5rem 2fr 3rem;
 }
 
 main {
