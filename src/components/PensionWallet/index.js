@@ -1,7 +1,7 @@
 import './PensionWallet.scss';
 import React from 'react';
 import { ethers } from 'ethers';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
 import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json';
@@ -12,18 +12,19 @@ import {
   authUnverifiedAction,
   authVerifiedAction,
 } from '../../store/actions/authAction';
+import { activeSpinnerAction, desactiveSpinnerAction } from '../../store/actions/uiAction';
 
 function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet');
-  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
+  const { spinner } = useSelector(({ ui }) => ui);
 
   const connectWallet = async () => {
     console.log(window.ethereum);
     if (typeof window.ethereum !== 'undefined') {
       if (addressWallet === 'Connect your Wallet') {
-        setLoading(true);
+        dispatch(activeSpinnerAction());
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await web3Provider.send('eth_requestAccounts', []);
         const wallet = accounts[0];
@@ -34,34 +35,33 @@ function PensionWallet() {
           const chanId = await web3Signer.getChainId();
           if (chanId !== 4) {
             alert("Change your network to Rinkeby's testnet!");
-            setLoading(false);
+            dispatch(desactiveSpinnerAction());
             return;
           }
           setAdressWallet('...' + String(wallet).slice(38));
-          setLoading(false);
 
           dispatch(authRegistedAction());
           dispatch(authVerifiedAction());
         } else {
           alert('Your wallet is not registed in Proof of Humanity');
-          setLoading(false);
+          dispatch(desactiveSpinnerAction());
         }
       } else {
         if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
-          setLoading(true);
+          dispatch(activeSpinnerAction());
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
 
           alert('Disconnected ypur wallet');
           setAdressWallet('Connect your Wallet');
-          setLoading(false);
+          dispatch(desactiveSpinnerAction());
           window.location.href = './';
         } else {
-          setLoading(true);
+          dispatch(activeSpinnerAction());
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
           setAdressWallet('Connect your Wallet');
-          setLoading(false);
+          dispatch(desactiveSpinnerAction());
         }
       }
     } else {
@@ -77,7 +77,7 @@ function PensionWallet() {
 
   return (
     <button className="wallet" onClick={connectWallet}>
-      {loading ? 'Loading...' : addressWallet}
+      {spinner.isActive ? 'Loading...' : addressWallet}
     </button>
   );
 }
