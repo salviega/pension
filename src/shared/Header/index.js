@@ -3,12 +3,10 @@ import logo from '../../asserts/images/pension.png';
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function Header(props) {
-  const [isRegisted, setIsRegisted] = React.useState(false);
-  const [isVerified, setIsVerified] = React.useState(false);
-
-  React.useEffect(() => {}, []);
+  const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
 
   return (
     <header className="Header">
@@ -45,7 +43,7 @@ function Header(props) {
                 </NavLink>
               </li>
             )}
-            <li className="main-nav__item">{React.cloneElement(props.children, { setIsRegisted, setIsVerified })}</li>
+            <li className="main-nav__item">{React.cloneElement(props.children, {})}</li>
           </div>
         </ul>
       </nav>
