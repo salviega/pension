@@ -56,7 +56,7 @@ contract Pension is ERC721 {
     uint256 public age;
     uint256 public bornAge;
     uint256 public cutoffDate;
-    uint256 public lifeExpectancy;
+    uint256 public ExpectancyAfterRetirement;
     uint256 public pensionCreatedTime;
     uint256 public timeToUpdateAnnualAmount;
 
@@ -84,8 +84,10 @@ contract Pension is ERC721 {
     // ************************ //
     // *   Generate pension   * //
     // ************************ //
-
-    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) payable public returns (MonthlyRecord memory){
+    
+    // -- Docs
+    // -- Testing --
+    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) payable public {
         require(!verifyIfTheContributorAlreadyMint(), "Already generated his pension");
         require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
         require(msg.value == _firstQuote, "You don't have this amount");
@@ -97,11 +99,12 @@ contract Pension is ERC721 {
 
         uint256 pensionId = pensionIdCounter.current();
         pensionIdCounter.increment();
-
         _safeMint(msg.sender, pensionId);
+        
+        depositAmount(pensionId, _firstQuote);
         addressesThatAlreadyMinted[msg.sender] = true;
         pensions[pensionId] = msg.sender; 
-        return depositAmount(pensionId, _firstQuote);
+        determLifeExpectancyAfterRetirement();
     }
 
 
@@ -113,8 +116,8 @@ contract Pension is ERC721 {
      *  @param _pensionId La pensión.
      *  @param _amount DAI a depositar.
     */
-
-    function depositAmount(uint256 _pensionId, uint256 _amount) payable public  returns(MonthlyRecord memory) {
+    // -- Testing --
+    function depositAmount(uint256 _pensionId, uint256 _amount) payable public {
         require(msg.sender == pensions[_pensionId] && msg.sender == ownerOf(_pensionId), "You don't own this pension");
         require(msg.value == _amount, "The amount isn't enough");
         require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
@@ -125,7 +128,7 @@ contract Pension is ERC721 {
 
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
-        return registerMonthlyQuote(_pensionId, _amount, contributionDate, savingsAmount, solidaryAmount);
+        registerMonthlyQuote(_pensionId, _amount, contributionDate, savingsAmount, solidaryAmount);
     }
 
     /* @dev Register quote deposit in the general balance
@@ -134,13 +137,12 @@ contract Pension is ERC721 {
      * @param _contributionDate DAI a depositar
      * @param _savingsAmount DAI a depositar
      * @param _solidaryAmount
-    */
-
-    function registerMonthlyQuote(uint256 _pensionId, uint256 _contribution, uint256 _contributionDate, uint256 _savingsAmount, uint256 _solidaryAmount) private returns(MonthlyRecord memory) {
+    */ 
+    // -- Testing --
+    function registerMonthlyQuote(uint256 _pensionId, uint256 _contribution, uint256 _contributionDate, uint256 _savingsAmount, uint256 _solidaryAmount) private {
         bytes32 id = keccak256(abi.encodePacked(_contributionDate));
         generalBalance[cutoffDate].totalAmount += _contribution;
         generalBalance[cutoffDate].monthlyQuotes.push(MonthlyQuote(msg.sender, id, _pensionId, _contributionDate, _contribution, _savingsAmount, _solidaryAmount));
-        return generalBalance[cutoffDate];
     }
 
     // function setAnnualAmount(uint256 newAnnualAmount, uint256 pensionId) payable public {
@@ -157,27 +159,6 @@ contract Pension is ERC721 {
     //         timeToUpdateAnnualAmount = currentTime + 365 days;
     //     }
     // }
-
-    // falta validar
-    function transferPension(address from, address to, uint256 pensionId) public {
-        transferFrom(from, to, pensionId);
-        pensions[pensionId] = to;
-    }
-
-
-    //keepers
-    function withdraw(uint256 pensionId) payable public returns(bool) {
-        // require(pensions[pensionId] == ownerOf(pensionId), "You don't own this pension"); // Verificar
-        // require(age >= retirentment, "You don't yet of retirement age");
-
-        // uint256 quote = quoteSolidaryRegimePension(pensionId);
-        // require(quote < deposits[contributor][pensionId], "Cannot withdraw more that deposited");
-        // (bool output, bytes memory response) = msg.sender{value:quote, gas: 200000}("");
-        // deposits[contributor][pensionId] -= quote;
-        // return output;
-        // // Incvompleto
-
-    }
 
     // ************************ //
     // *       Keepers        * //
@@ -203,32 +184,62 @@ contract Pension is ERC721 {
         //Todo
     }
 
+    function withdraw(uint256 pensionId) payable public returns(bool) {
+        // require(pensions[pensionId] == ownerOf(pensionId), "You don't own this pension"); // Verificar
+        // require(age >= retirentment, "You don't yet of retirement age");
+
+        // uint256 quote = quoteSolidaryRegimePension(pensionId);
+        // require(quote < deposits[contributor][pensionId], "Cannot withdraw more that deposited");
+        // (bool output, bytes memory response) = msg.sender{value:quote, gas: 200000}("");
+        // deposits[contributor][pensionId] -= quote;
+        // return output;
+        // // Incvompleto
+
+    }
+
     // ************************ //
     // *       Function       * //
     // ************************ //
     
-    function totalAsserts() view external returns(uint256) {
+    // -- Docs
+    // -- Testing --
+    function getmonthlyBalanceFromGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
+        return generalBalance[_cutoffDate];
+    }
+    // -- Docs
+    // -- Testing --
+    function totalAsserts() view public returns(uint256) {
         return address(this).balance;
     }
-
+    // -- Docs
+    // -- Testing --
     function verifyIfTheContributorAlreadyMint() public view returns(bool) {
         if(addressesThatAlreadyMinted[msg.sender]) { return true; }
         return false;
     }
-
-    function determLifeExpectancy() internal returns(bool){
+    // -- Docs
+    // -- Testing --
+    function transferPension(address _to, uint256 _pensionId) public {
+        require(msg.sender == pensions[_pensionId] && msg.sender == ownerOf(_pensionId), "You don't own this pension");
+        transferFrom(msg.sender, _to, _pensionId);
+        pensions[_pensionId] = _to;
+    }
+    // -- Docs
+    // -- Testing --
+    function determLifeExpectancyAfterRetirement() private returns(bool){
         if(compareStrings(biologySex, "male")) {
-            lifeExpectancy = 85 - 61;
+            ExpectancyAfterRetirement = 85 - 61;
             return true;
         }
         if(compareStrings(biologySex, "female")) {
-            lifeExpectancy = 80 - 61;
+            ExpectancyAfterRetirement = 80 - 61;
             return true;
         }
         return false;
     }
-
-    function compareStrings(string memory a, string memory b) public pure returns (bool) {
+    // -- Docs
+    // -- Testing --
+    function compareStrings(string memory a, string memory b) private pure returns (bool) {
         return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 }
