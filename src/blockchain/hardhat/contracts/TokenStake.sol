@@ -32,7 +32,7 @@ contract TokenStake {
     }
 
     // Unstaking Tokens (Withdraw)
-    function unstakeTokens() public {
+    function unstakeTokens() intern {
         uint balance = stakingBalance[msg.sender];
 
         // balance should be > 0

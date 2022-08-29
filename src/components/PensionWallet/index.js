@@ -16,13 +16,13 @@ import { activeSpinnerAction, desactiveSpinnerAction } from '../../store/actions
 
 function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet');
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
   const { spinner } = useSelector(({ ui }) => ui);
-  const [loading, setLoading] = React.useState(false);
 
   const connectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+    if (window.ethereum && window.ethereum.isMetaMask) {
       if (addressWallet === 'Connect your Wallet') {
         setLoading(true);
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -32,8 +32,8 @@ function PensionWallet() {
         const verification = await verifyInProofOfHumanity(wallet);
         if (verification) {
           const web3Signer = web3Provider.getSigner();
-          const chanId = await web3Signer.getChainId();
-          if (chanId !== 4) {
+          const chainId = await web3Signer.getChainId();
+          if (chainId !== 4) {
             alert("Change your network to Rinkeby's testnet!");
             setLoading(false);
             return;
@@ -63,7 +63,7 @@ function PensionWallet() {
         }
       }
     } else {
-      alert('Install Metamask in your browser');
+      alert("Metamask wasn't detected, please install metamask extension");
     }
   };
 
