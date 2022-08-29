@@ -1,7 +1,7 @@
 import './PensionWallet.scss';
 import React from 'react';
 import { ethers } from 'ethers';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
 import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json';
@@ -12,19 +12,17 @@ import {
   authUnverifiedAction,
   authVerifiedAction,
 } from '../../store/actions/authAction';
-import { activeSpinnerAction, desactiveSpinnerAction } from '../../store/actions/uiAction';
 
 function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet');
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
-  const { spinner } = useSelector(({ ui }) => ui);
 
   const connectWallet = async () => {
-    console.log(window.ethereum);
-    if (typeof window.ethereum !== 'undefined') {
+    if (window.ethereum && window.ethereum.isMetaMask) {
       if (addressWallet === 'Connect your Wallet') {
-        dispatch(activeSpinnerAction());
+        setLoading(true);
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await web3Provider.send('eth_requestAccounts', []);
         const wallet = accounts[0];
@@ -32,40 +30,38 @@ function PensionWallet() {
         const verification = await verifyInProofOfHumanity(wallet);
         if (verification) {
           const web3Signer = web3Provider.getSigner();
-          const chanId = await web3Signer.getChainId();
-          if (chanId !== 4) {
+          const chainId = await web3Signer.getChainId();
+          if (chainId !== 4) {
             alert("Change your network to Rinkeby's testnet!");
-            dispatch(desactiveSpinnerAction());
+            setLoading(false);
             return;
           }
+          setLoading(false);
           setAdressWallet('...' + String(wallet).slice(38));
-
           dispatch(authRegistedAction());
           dispatch(authVerifiedAction());
         } else {
           alert('Your wallet is not registed in Proof of Humanity');
-          dispatch(desactiveSpinnerAction());
+          setLoading(false);
         }
       } else {
         if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
-          dispatch(activeSpinnerAction());
+          setLoading(true);
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
-
-          alert('Disconnected ypur wallet');
+          alert('Disconnected your wallet');
           setAdressWallet('Connect your Wallet');
-          dispatch(desactiveSpinnerAction());
-          window.location.href = './';
+          setLoading(false);
         } else {
-          dispatch(activeSpinnerAction());
+          setLoading(true);
           dispatch(authUnregistedAction());
           dispatch(authUnverifiedAction());
           setAdressWallet('Connect your Wallet');
-          dispatch(desactiveSpinnerAction());
+          setLoading(false);
         }
       }
     } else {
-      alert('Install Metamask in your browser');
+      alert("Metamask wasn't detected, please install metamask extension");
     }
   };
 
@@ -77,7 +73,7 @@ function PensionWallet() {
 
   return (
     <button className="wallet" onClick={connectWallet}>
-      {spinner.isActive ? 'Loading...' : addressWallet}
+      {loading ? 'Loading...' : addressWallet}
     </button>
   );
 }

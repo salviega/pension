@@ -1,13 +1,14 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import { ethers } from 'ethers';
 
 import { Header } from '../../shared/Header';
 import { Footer } from '../../shared/Footer';
 import { PensionLoading } from '../PensionLoading';
 import { PensionWallet } from '../PensionWallet';
 import { PensionHome } from '../PensionHome';
-import { PensionMyPension } from '../PensionMyPension';
 import { PensionAbout } from '../PensionAbout';
+import { PensionMyPensions } from '../PensionMyPensions';
 import { PensionRegister } from '../PensionRegister';
 
 import './App.scss';
@@ -15,7 +16,32 @@ import { Modal } from '../../shared/Modal';
 import { useSelector } from 'react-redux';
 
 function App() {
-  const { modal, spinner } = useSelector((e) => e.ui);
+  const { modal } = useSelector(({ ui }) => ui);
+
+  React.useEffect(() => {
+    const currentNetwork = async () => {
+      const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+      const web3Signer = web3Provider.getSigner();
+      const chainId = await web3Signer.getChainId();
+      return chainId;
+    };
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        currentNetwork().then((response) => {
+          if (response !== 4) {
+            window.location.reload();
+          }
+        });
+      });
+    }
+
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', () => {
+        alert('You changed the account, you were returned to the home page');
+        window.location.reload();
+      });
+    }
+  }, []);
 
   return (
     <HashRouter>
@@ -24,11 +50,11 @@ function App() {
           <PensionWallet />
         </Header>
         <main>
-          {spinner.isActive && <PensionLoading />}
+          <PensionLoading />
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
-            <Route path="/mypensions" element={<PensionMyPension />} />
+            <Route path="/mypensions" element={<PensionMyPensions />} />
             <Route path="/register" element={<PensionRegister />} />
           </Routes>
         </main>

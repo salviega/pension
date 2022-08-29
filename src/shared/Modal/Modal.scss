@@ -1,4 +1,4 @@
-.Modal {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,4 +9,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__outer {
+    cursor: pointer;
+    margin: 25px;
+    margin-right: 50px;
+    padding: 0;
+    width: 25px;
+    position: relative;
+    float: right;
+
+    &:before,
+    &:after {
+      background: #212121;
+      content: "";
+      height: 1.5px;
+      position: absolute;
+      width: inherit;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
 }
