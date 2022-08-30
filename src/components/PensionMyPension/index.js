@@ -7,7 +7,24 @@ function PensionMyPension() {
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
 
   if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
-  return <h1>{':d'}</h1>;
+  return (
+    <article className="pension">
+      <div className="pension__header">
+        <h3 className="pension__title">UBI-ETH</h3>
+        <button className="pension__btn">Deposit</button>
+      </div>
+      <div className="pension__body">
+        <div className="pension__description">
+          <p>Total deposited</p>
+          <p>$25,853</p>
+        </div>
+        <div className="pension__description">
+          <p>Pool rate</p>
+          <p>0 UBI / week</p>
+        </div>
+      </div>
+    </article>
+  );
 }
 
 export { PensionMyPension };
