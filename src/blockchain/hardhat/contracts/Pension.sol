@@ -31,10 +31,10 @@ contract Pension is ERC721 {
         address owner;
         bytes32 id;
         uint256 pensionId;
-        uint256 contribution;
         uint256 contributionDate;
         uint256 savingAmount; 
         uint256 solidaryAmount; 
+        uint256 totalAmount;
     }
 
     struct MonthlyRecord {
@@ -82,7 +82,7 @@ contract Pension is ERC721 {
     }
 
     // ************************ //
-    // *   Generate pension   * //
+    // *     Mint pension     * //
     // ************************ //
     
     // -- Docs
@@ -93,6 +93,7 @@ contract Pension is ERC721 {
         require(msg.value == _firstQuote, "You don't have this amount");
         require(_age >= 18, "You must be 18 years or older to generate a pension");
 
+        //uint256 mintDate = block.timestamp;
         biologySex = _biologySex;
         age = _age;
         bornAge = _bornAge;
@@ -139,10 +140,10 @@ contract Pension is ERC721 {
      * @param _solidaryAmount
     */ 
     // -- Testing --
-    function registerMonthlyQuote(uint256 _pensionId, uint256 _contribution, uint256 _contributionDate, uint256 _savingsAmount, uint256 _solidaryAmount) private {
+    function registerMonthlyQuote(uint256 _pensionId, uint256 _totalAmount, uint256 _contributionDate, uint256 _savingsAmount, uint256 _solidaryAmount) private {
         bytes32 id = keccak256(abi.encodePacked(_contributionDate));
-        generalBalance[cutoffDate].totalAmount += _contribution;
-        generalBalance[cutoffDate].monthlyQuotes.push(MonthlyQuote(msg.sender, id, _pensionId, _contributionDate, _contribution, _savingsAmount, _solidaryAmount));
+        generalBalance[cutoffDate].totalAmount += _totalAmount;
+        generalBalance[cutoffDate].monthlyQuotes.push(MonthlyQuote(msg.sender, id, _pensionId, _contributionDate, _savingsAmount, _solidaryAmount,  _totalAmount));
     }
 
     // function setAnnualAmount(uint256 newAnnualAmount, uint256 pensionId) payable public {
@@ -161,9 +162,27 @@ contract Pension is ERC721 {
     // }
 
     // ************************ //
+    // *   Solidary Regime    * //
+    // ************************ //
+
+    // ************************ //
+    // *   salvings Regime    * //
+    // ************************ //
+
+    // ************************ //
+    // *   DEFI investment    * //
+    // ************************ //
+
+    // ************************ //
+    // *    Overhead cost     * //
+    // ************************ //
+
+    // ************************ //
     // *       Keepers        * //
     // ************************ //
 
+    // -- Docs
+    // -- Testing --
     function updateCutoffDate() private {
         if ((block.timestamp - cutoffDate) > interval) {
             cutoffDate = block.timestamp;
@@ -171,7 +190,9 @@ contract Pension is ERC721 {
             generalBalance[cutoffDate] = monthlyRecord;
         }
     }
-
+    
+    // -- Docs
+    // -- Testing --
     function setAge() public {
         uint256 birthday = bornAge + age;
         uint256 dayBeforeBirthday = block.timestamp - 1 days;
@@ -198,7 +219,7 @@ contract Pension is ERC721 {
     }
 
     // ************************ //
-    // *       Function       * //
+    // *        Utils         * //
     // ************************ //
     
     // -- Docs
