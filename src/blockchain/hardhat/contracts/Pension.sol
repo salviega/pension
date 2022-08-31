@@ -24,6 +24,7 @@ contract Pension is ERC721 {
     /* Constants and immutable */
     uint256 constant private interval = 30 days;
     uint256 constant private mininumDeposit = 25;
+    uint256 constant private retirentmentAge = 365 days * 61;
 
 
     /* Struct */
@@ -42,10 +43,23 @@ contract Pension is ERC721 {
         MonthlyQuote[] monthlyQuotes;
     }
 
+    struct retairedQuote {
+        address owner;
+        uint256 monthlyQuote;
+        uint256 quantityQuotes;
+        uint256 paidQuotestotal;
+    }
+
+    struct retairedRecord {
+        uint256 totalAmount;
+        retairedQuote[] retairedQuote;
+    }
+
     /* Storage */
     MonthlyQuote[]  private monthlyQuotes;
     MonthlyRecord[] private monthlyRecords;
-
+    uint256[] private withdrawPensionList;
+    mapping(uint256 => uint256[]) public cutoffDateWithdrawPensionBalance;
     mapping(address => mapping(uint256 => uint256)) public savingsBalance;
     mapping(address => mapping(uint256 => uint256)) public solidaryBalance;
     mapping(uint256 => address) public pensions;
@@ -93,14 +107,20 @@ contract Pension is ERC721 {
         require(msg.value == _firstQuote, "You don't have this amount");
         require(_age >= 18, "You must be 18 years or older to generate a pension");
 
-        //uint256 mintDate = block.timestamp;
+        // todo: 
+        uint256 mintDate = block.timestamp; 
         biologySex = _biologySex;
-        age = _age;
-        bornAge = _bornAge;
+        age = _age * 365 days; 
+        bornAge = _bornAge;  
 
         uint256 pensionId = pensionIdCounter.current();
         pensionIdCounter.increment();
         _safeMint(msg.sender, pensionId);
+
+        uint256 timeRetirentment = retirentmentAge - age; 
+        uint256 retirentmentDate = mintDate + timeRetirentment; 
+        uint256 retirentmentCutoffDate =  ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(pensionId);  
         
         depositAmount(pensionId, _firstQuote);
         addressesThatAlreadyMinted[msg.sender] = true;
@@ -126,7 +146,7 @@ contract Pension is ERC721 {
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
         uint256 solidaryAmount = _amount * 73 / 100;
-
+    
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(_pensionId, _amount, contributionDate, savingsAmount, solidaryAmount);
@@ -165,6 +185,10 @@ contract Pension is ERC721 {
     // *   Solidary Regime    * //
     // ************************ //
 
+    // -- Docs
+    // -- Testing --
+
+
     // ************************ //
     // *   salvings Regime    * //
     // ************************ //
@@ -183,6 +207,17 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
+    function generateNewRetirentment(uint256 _cutoffDate) private {
+       uint256[] memory cutofDatePensions = cutoffDateWithdrawPensionBalance[_cutoffDate];
+       for (uint256 index = 0; index > cutofDatePensions.length ; index++) {
+           uint256 pension = cutofDatePensions[index];
+           registerRetirentment(pension); //
+       }
+    
+    }
+
+    // -- Docs
+    // -- Testing --
     function updateCutoffDate() private {
         if ((block.timestamp - cutoffDate) > interval) {
             cutoffDate = block.timestamp;
@@ -190,7 +225,7 @@ contract Pension is ERC721 {
             generalBalance[cutoffDate] = monthlyRecord;
         }
     }
-    
+
     // -- Docs
     // -- Testing --
     function setAge() public {
@@ -211,7 +246,8 @@ contract Pension is ERC721 {
 
         // uint256 quote = quoteSolidaryRegimePension(pensionId);
         // require(quote < deposits[contributor][pensionId], "Cannot withdraw more that deposited");
-        // (bool output, bytes memory response) = msg.sender{value:quote, gas: 200000}("");
+        // msg.sender.transfer(quote);
+        //bool output, bytes memory response) = msg.sender{value:quote, gas: 200000}("");
         // deposits[contributor][pensionId] -= quote;
         // return output;
         // // Incvompleto
@@ -222,6 +258,14 @@ contract Pension is ERC721 {
     // *        Utils         * //
     // ************************ //
     
+    function registerRetirentment(uint256 _pension) private {
+        uint256 savingsMoneyTotal= savingsBalance[_pension];
+        uint256 solidaryMoneyTotal = solidaryBalance[_pension];
+        uint256 pensionMoneyTotal= totalSavingsMoney + totalSolidaryMoney;
+        uint256 monthlyQuoteValue = ((pensionMoneyTotal/21)/12); 
+        
+
+    }
     // -- Docs
     // -- Testing --
     function getmonthlyBalanceFromGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
