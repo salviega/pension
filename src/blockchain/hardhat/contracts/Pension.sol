@@ -90,7 +90,7 @@ contract Pension is ERC721, TokenStake{
      *  
     */
 
-    constructor(address _erc20Token) ERC721 ("Pension", "PNS") TokenStake(_erc20Token = 0x5eD8BD53B0c3fa3dEaBd345430B1A3a6A4e8BD7C) {
+    constructor(address _erc20Token) ERC721 ("Pension", "PNS") TokenStake(_erc20Token) {
         cutoffDate = block.timestamp;
         MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
         generalBalance[cutoffDate] = monthlyRecord;
