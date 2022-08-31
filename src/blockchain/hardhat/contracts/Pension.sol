@@ -22,9 +22,13 @@ contract Pension is ERC721 {
     Counters.Counter public pensionIdCounter;
 
     /* Constants and immutable */
+    uint256 constant private femaleExpectancyLife = 365 days * 80;
     uint256 constant private interval = 30 days;
+    uint256 constant private majorityAge = 18;
+    uint256 constant private maleExpectancyLife = 365 days * 85;
     uint256 constant private mininumDeposit = 25;
     uint256 constant private retirentmentAge = 365 days * 61;
+    uint256 constant private quantityQuotes = 365 days +39;
 
 
     /* Struct */
@@ -43,40 +47,63 @@ contract Pension is ERC721 {
         MonthlyQuote[] monthlyQuotes;
     }
 
-    struct retairedQuote {
+    struct PensionOwner {
+        address owner;
+        string biologySex;
+        uint256 age;
+        uint256 bornAge;
+        uint256 expectancyAfterRetirement;
+        uint256 pensionCreatedTime;
+        uint256 pensionId;
+    }
+
+    struct RetairedQuote {
         address owner;
         uint256 monthlyQuote;
         uint256 quantityQuotes;
-        uint256 paidQuotestotal;
+        uint256 totalPaidQuotes;
+        uint256 totalPension;
     }
 
-    struct retairedRecord {
+    struct RetairedRecord {
         uint256 totalAmount;
-        retairedQuote[] retairedQuote;
+        RetairedQuote[] retairedQuotes;
     }
 
     /* Storage */
+
     MonthlyQuote[]  private monthlyQuotes;
+    Pension[] private pensions;
     MonthlyRecord[] private monthlyRecords;
-    uint256[] private withdrawPensionList;
-    mapping(uint256 => uint256[]) public cutoffDateWithdrawPensionBalance;
+    RetairedQuote[] private retairedQuotes;
+    RetairedRecord[] private retairedRecords;
+
+    mapping(address => bool) public addressesThatAlreadyMinted;
     mapping(address => mapping(uint256 => uint256)) public savingsBalance;
     mapping(address => mapping(uint256 => uint256)) public solidaryBalance;
-    mapping(uint256 => address) public pensions;
-    mapping(address => bool) public addressesThatAlreadyMinted;
+    mapping(uint256 => address) public ownerPensionsBalance;
     mapping(uint256 => MonthlyRecord) public generalBalance;
+    mapping(uint256 => PensionOwner[]) public cutoffDateWithdrawPensionBalance;
+    mapping(uint256 => RetairedRecord) public retairedBalance;
 
-    string  public biologySex;
-    uint256 public age;
-    uint256 public bornAge;
     uint256 public cutoffDate;
-    uint256 public ExpectancyAfterRetirement;
-    uint256 public pensionCreatedTime;
-    uint256 public timeToUpdateAnnualAmount;
+    uint256[] private withdrawPensionList;
 
     /* Modifiers */
 
-    // modifier onlyGovernor {require(msg.sender == governor, "The caller must be the governor"); _;}
+    // -- Docs
+    // -- Testing --
+    modifier onlyOwner(uint256 _pension) {
+       require(msg.sender == ownerPensionsBalance[_pension] && msg.sender == ownerOf(_pension), "You don't own this pension"); 
+        _;}
+
+    // -- Docs
+    // -- Testing --
+    modifier validAmount(uint256 _amount) {
+        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
+        require(msg.value == _amount, "You don't have this amount");
+        _;
+    }
 
     /* Events */
 
@@ -85,10 +112,11 @@ contract Pension is ERC721 {
       * @param _voucher The address that vouched.
     */
 
+
+
     /** @dev Constructor
      *  
     */
-
     constructor() ERC721 ("Pension", "PNS") {
         cutoffDate = block.timestamp;
         MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
@@ -101,31 +129,28 @@ contract Pension is ERC721 {
     
     // -- Docs
     // -- Testing --
-    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) payable public {
-        require(!verifyIfTheContributorAlreadyMint(), "Already generated his pension");
-        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
-        require(msg.value == _firstQuote, "You don't have this amount");
-        require(_age >= 18, "You must be 18 years or older to generate a pension");
-
-        // todo: 
+    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) validAmount(_firstQuote) payable public {
+        require(!verifyIfTheContributorAlreadyMint(msg.sender), "Already generated his pension");
+        require(_age >= majorityAge, "You must be 18 years or older to generate a pension");
+        
+        uint256 age = _age * 365 days; 
+        uint256 expectancyAfterRetirement = determLifeExpectancyAfterRetirement(_biologySex);
         uint256 mintDate = block.timestamp; 
-        biologySex = _biologySex;
-        age = _age * 365 days; 
-        bornAge = _bornAge;  
 
         uint256 pensionId = pensionIdCounter.current();
         pensionIdCounter.increment();
         _safeMint(msg.sender, pensionId);
 
+        PensionOwner memory newPension = PensionOwner(msg.sender, _biologySex, age, _bornAge, expectancyAfterRetirement,  pensionId, mintDate);       
+
         uint256 timeRetirentment = retirentmentAge - age; 
         uint256 retirentmentDate = mintDate + timeRetirentment; 
-        uint256 retirentmentCutoffDate =  ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
-        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(pensionId);  
+        uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
         
         depositAmount(pensionId, _firstQuote);
         addressesThatAlreadyMinted[msg.sender] = true;
-        pensions[pensionId] = msg.sender; 
-        determLifeExpectancyAfterRetirement();
+        ownerPensionsBalance[pensionId] = msg.sender; 
     }
 
 
@@ -133,20 +158,18 @@ contract Pension is ERC721 {
     // *       Quoutes        * //
     // ************************ //
 
-    /** @dev depositar DAIs según la cantidad anual pactada en el minteo.
-     *  @param _pensionId La pensión.
-     *  @param _amount DAI a depositar.
+    /*
+      * @dev depositar DAIs según la cantidad anual pactada en el minteo.
+      *  @param _pensionId La pensión.
+      *  @param _amount DAI a depositar.
     */
     // -- Testing --
-    function depositAmount(uint256 _pensionId, uint256 _amount) payable public {
-        require(msg.sender == pensions[_pensionId] && msg.sender == ownerOf(_pensionId), "You don't own this pension");
-        require(msg.value == _amount, "The amount isn't enough");
-        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
+
+    function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(_pensionId) validAmount(_amount) {
         
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
         uint256 solidaryAmount = _amount * 73 / 100;
-    
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(_pensionId, _amount, contributionDate, savingsAmount, solidaryAmount);
@@ -207,19 +230,9 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    function generateNewRetirentment(uint256 _cutoffDate) private {
-       uint256[] memory cutofDatePensions = cutoffDateWithdrawPensionBalance[_cutoffDate];
-       for (uint256 index = 0; index > cutofDatePensions.length ; index++) {
-           uint256 pension = cutofDatePensions[index];
-           registerRetirentment(pension); //
-       }
-    
-    }
-
-    // -- Docs
-    // -- Testing --
     function updateCutoffDate() private {
         if ((block.timestamp - cutoffDate) > interval) {
+            generateNewRetirentments(cutoffDate);
             cutoffDate = block.timestamp;
             MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
             generalBalance[cutoffDate] = monthlyRecord;
@@ -228,13 +241,13 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    function setAge() public {
-        uint256 birthday = bornAge + age;
-        uint256 dayBeforeBirthday = block.timestamp - 1 days;
-        uint256 dayAfterBirthday =  block.timestamp + 1 days;
-        require(birthday > dayBeforeBirthday && birthday < dayAfterBirthday, "Doesn't your birthday");
-        age += 1;
-    }
+    // function setAge() public {
+    //     uint256 birthday = bornAge + age;
+    //     uint256 dayBeforeBirthday = block.timestamp - 1 days;
+    //     uint256 dayAfterBirthday =  block.timestamp + 1 days;
+    //     require(birthday > dayBeforeBirthday && birthday < dayAfterBirthday, "Doesn't your birthday");
+    //     age += 1;
+    // }
 
     function setTimeToUpdateAnnualAmount() public {
         //Todo
@@ -257,51 +270,67 @@ contract Pension is ERC721 {
     // ************************ //
     // *        Utils         * //
     // ************************ //
-    
-    function registerRetirentment(uint256 _pension) private {
-        uint256 savingsMoneyTotal= savingsBalance[_pension];
-        uint256 solidaryMoneyTotal = solidaryBalance[_pension];
-        uint256 pensionMoneyTotal= totalSavingsMoney + totalSolidaryMoney;
-        uint256 monthlyQuoteValue = ((pensionMoneyTotal/21)/12); 
-        
 
+    // -- Docs
+    // -- Testing --
+    function generateNewRetirentments(uint256 _cutoffDate) private {
+       PensionOwner[] memory cutoffDatePensionList = cutoffDateWithdrawPensionBalance[_cutoffDate];
+       for (uint256 index = 0; index > cutoffDatePensionList.length ; index++) {
+           PensionOwner memory pension = cutoffDatePensionList[index];
+           registerRetirentment(pension, _cutoffDate); 
+       }
     }
+
+    // -- Docs
+    // -- Testing --
+    function registerRetirentment(PensionOwner memory _pension, uint256 retirentmentDate) private {
+        uint256 totalSavingsMoney = savingsBalance[_pension.owner][_pension.pensionId];
+        uint256 totalSolidaryMoney = solidaryBalance[_pension.owner][_pension.pensionId];
+        uint256 totalPensionMoney = totalSavingsMoney + totalSolidaryMoney;
+        uint256 monthlyQuoteValue = ((totalPensionMoney/21)/12); 
+        RetairedQuote memory newRetaired = RetairedQuote(_pension.owner, monthlyQuoteValue, quantityQuotes, 0, totalPensionMoney);
+        retairedBalance[retirentmentDate].totalAmount += newRetaired.totalPension;
+        retairedBalance[retirentmentDate].retairedQuotes.push(newRetaired);
+    }
+
     // -- Docs
     // -- Testing --
     function getmonthlyBalanceFromGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
         return generalBalance[_cutoffDate];
     }
+
     // -- Docs
     // -- Testing --
     function totalAsserts() view public returns(uint256) {
         return address(this).balance;
     }
+
     // -- Docs
     // -- Testing --
-    function verifyIfTheContributorAlreadyMint() public view returns(bool) {
-        if(addressesThatAlreadyMinted[msg.sender]) { return true; }
+    function verifyIfTheContributorAlreadyMint(address _owner) public view returns(bool) {
+        if(addressesThatAlreadyMinted[_owner]) { return true; }
         return false;
     }
+
     // -- Docs
     // -- Testing --
-    function transferPension(address _to, uint256 _pensionId) public {
-        require(msg.sender == pensions[_pensionId] && msg.sender == ownerOf(_pensionId), "You don't own this pension");
+    function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
         transferFrom(msg.sender, _to, _pensionId);
-        pensions[_pensionId] = _to;
+        ownerPensionsBalance[_pensionId] = _to;
     }
+
     // -- Docs
     // -- Testing --
-    function determLifeExpectancyAfterRetirement() private returns(bool){
-        if(compareStrings(biologySex, "male")) {
-            ExpectancyAfterRetirement = 85 - 61;
-            return true;
+    function determLifeExpectancyAfterRetirement(string memory _biologySex) private pure returns(uint256){
+        if(compareStrings(_biologySex, "male")) {
+            return maleExpectancyLife - retirentmentAge;
+        } 
+        if(compareStrings(_biologySex, "female")) {
+            return femaleExpectancyLife - retirentmentAge;
         }
-        if(compareStrings(biologySex, "female")) {
-            ExpectancyAfterRetirement = 80 - 61;
-            return true;
-        }
-        return false;
+        return 0;
     }
+    
     // -- Docs
     // -- Testing --
     function compareStrings(string memory a, string memory b) private pure returns (bool) {
