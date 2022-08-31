@@ -24,7 +24,7 @@ contract Pension is ERC721, TokenStake{
 
     /* Constants and immutable */
     uint256 constant private interval = 30 days;
-    uint256 constant private mininumDeposit = 25;
+    uint256 constant private mininumDeposit = 25 * 10 **18;
     uint256 constant private retirentmentAge = 365 days * 61;
 
 
@@ -102,10 +102,10 @@ contract Pension is ERC721, TokenStake{
     
     // -- Docs
     // -- Testing --
-    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) payable public {
+    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) public {
         require(!verifyIfTheContributorAlreadyMint(), "Already generated his pension");
-        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
-        require(msg.value == _firstQuote, "You don't have this amount");
+        require(_firstQuote >= mininumDeposit, "The amount doesn't reach the minimum required");
+        //require(msg.value == _firstQuote, "You don't have this amount");
         require(_age >= 18, "You must be 18 years or older to generate a pension");
 
         // todo: 
@@ -123,9 +123,10 @@ contract Pension is ERC721, TokenStake{
         uint256 retirentmentCutoffDate =  ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
         cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(pensionId);  
         
-        depositAmount(pensionId, _firstQuote);
         addressesThatAlreadyMinted[msg.sender] = true;
         pensions[pensionId] = msg.sender; 
+
+        depositAmount(pensionId, _firstQuote);
         determLifeExpectancyAfterRetirement();
     }
 
@@ -139,10 +140,10 @@ contract Pension is ERC721, TokenStake{
      *  @param _amount DAI a depositar.
     */
     // -- Testing --
-    function depositAmount(uint256 _pensionId, uint256 _amount) payable public {
+    function depositAmount(uint256 _pensionId, uint256 _amount) public {
         require(msg.sender == pensions[_pensionId] && msg.sender == ownerOf(_pensionId), "You don't own this pension");
-        require(msg.value == _amount, "The amount isn't enough");
-        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
+        //require(msg.value == _amount, "The amount isn't enough");
+        require(_amount >= mininumDeposit, "The amount doesn't reach the minimum required");
         
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
@@ -151,6 +152,8 @@ contract Pension is ERC721, TokenStake{
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(_pensionId, _amount, contributionDate, savingsAmount, solidaryAmount);
+        
+        stakeTokens(_amount); // Stake the received DAIs
     }
 
     /* @dev Register quote deposit in the general balance
@@ -241,7 +244,7 @@ contract Pension is ERC721, TokenStake{
         //Todo
     }
 
-    function withdraw(uint256 pensionId) payable public returns(bool) {
+    function withdraw(uint256 pensionId) public {
         // require(pensions[pensionId] == ownerOf(pensionId), "You don't own this pension"); // Verificar
         // require(age >= retirentment, "You don't yet of retirement age");
 
@@ -252,7 +255,7 @@ contract Pension is ERC721, TokenStake{
         // deposits[contributor][pensionId] -= quote;
         // return output;
         // // Incvompleto
-
+        unstakeTokens();
     }
 
     // ************************ //
