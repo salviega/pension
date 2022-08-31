@@ -19,7 +19,7 @@ contract TokenStake {
         owner = msg.sender;
     }
 
-    function stakeTokens(uint _amount) public {
+    function stakeTokens(uint _amount) internal {
 
         // amount should be > 0
         require(_amount > 0, "amount should be > 0");
@@ -32,16 +32,28 @@ contract TokenStake {
     }
 
     // Unstaking Tokens (Withdraw)
-    function unstakeTokens() intern {
+    function unstakeTokens() internal {
+        
+        uint balance = stakingBalance[msg.sender];
+
+        unstakePartialTokens(balance);
+    }
+
+
+    // Unstaking Tokens (Withdraw)
+    function unstakePartialTokens(uint _amount) internal {
+
         uint balance = stakingBalance[msg.sender];
 
         // balance should be > 0
-        require (balance > 0, "staking balance cannot be 0");
+        require (_amount <= balance, "unstaking balance cannot be more than balance");
 
         // Transfer Mock Dai tokens to this contract for staking
-        _token.transfer(msg.sender, balance);
+        _token.transfer(msg.sender, _amount);
 
         // reset staking balance to 0
-        stakingBalance[msg.sender] = 0;
+        stakingBalance[msg.sender] = balance - _amount;
     }
+
+
 }

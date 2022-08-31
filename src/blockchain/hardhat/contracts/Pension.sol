@@ -5,6 +5,7 @@ pragma solidity >=0.7.0 <=0.8.14;
 //import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./TokenStake.sol";
 
 /**
  *  @title Pension
@@ -16,7 +17,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  *  The arbitrator must support appeal period.
  */
 
-contract Pension is ERC721 {
+contract Pension is ERC721, TokenStake{
     using Counters for Counters.Counter;
 
     Counters.Counter public pensionIdCounter;
@@ -89,7 +90,7 @@ contract Pension is ERC721 {
      *  
     */
 
-    constructor() ERC721 ("Pension", "PNS") {
+    constructor(address _erc20Token) ERC721 ("Pension", "PNS") TokenStake(_erc20Token = 0x5eD8BD53B0c3fa3dEaBd345430B1A3a6A4e8BD7C) {
         cutoffDate = block.timestamp;
         MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
         generalBalance[cutoffDate] = monthlyRecord;
@@ -257,14 +258,16 @@ contract Pension is ERC721 {
     // ************************ //
     // *        Utils         * //
     // ************************ //
-    
+
     function registerRetirentment(uint256 _pension) private {
+        /*
+        Commented it's not compiling for errors in this function
+
         uint256 savingsMoneyTotal= savingsBalance[_pension];
         uint256 solidaryMoneyTotal = solidaryBalance[_pension];
-        uint256 pensionMoneyTotal= totalSavingsMoney + totalSolidaryMoney;
+        uint256 pensionMoneyTotal= savingsMoneyTotal + solidaryMoneyTotal;
         uint256 monthlyQuoteValue = ((pensionMoneyTotal/21)/12); 
-        
-
+        */
     }
     // -- Docs
     // -- Testing --
