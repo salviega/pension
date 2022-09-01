@@ -23,7 +23,7 @@ contract Pension is ERC721 {
 
     /* Constants and immutable */
     uint256 constant private femaleExpectancyLife = 365 days * 80;
-    uint256 constant private interval = 30 days;
+    uint256 constant private interval = 30 days; //MVP
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
     uint256 constant private mininumDeposit = 25 * 10 ** 18;
@@ -108,9 +108,9 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    modifier validAmount(uint256 _amount) {
-        require(msg.value >= mininumDeposit, "The amount doesn't reach the minimum required");
-        require(msg.value == _amount, "You don't have this amount");
+    modifier validAmount(uint256 _callvalue, uint256 _amount) {
+        require(_callvalue >= mininumDeposit, "The amount doesn't reach the minimum required");
+        require(_callvalue == _amount, "You don't have this amount");
         _;
     }
 
@@ -138,7 +138,7 @@ contract Pension is ERC721 {
     
     // -- Docs
     // -- Testing --
-    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) validAmount(_firstQuote) public {
+    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) validAmount(msg.value, _firstQuote) payable public {
         require(!verifyIfTheContributorAlreadyMint(msg.sender), "Already generated his pension");
         require(_age >= majorityAge, "You must be 18 years or older to generate a pension");
         uint256 age = _age * 365 days; 
@@ -172,7 +172,7 @@ contract Pension is ERC721 {
     */
     // -- Testing --
 
-    function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(_pensionId) validAmount(_amount) {
+    function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(_pensionId) validAmount(msg.value, _amount) {
         
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
@@ -224,12 +224,20 @@ contract Pension is ERC721 {
             generalRecord.totalAmount += monthlyGeneralBalance[cutoffDate].totalAmount;
             generalRecord.totalToPay += retairedBalance[cutoffDate].totalToPay;
             
-            uint256 moneyDifference = generalRecord.totalAmount - generalRecord.totalToPay;
+            int moneyDifference = int(generalRecord.totalAmount) - int(generalRecord.totalToPay);
             
-            if (moneyDifference > 0) {
-                sendMoneyToRetired(generalRecord);
-                solvent += int(generalRecord.totalAmount);
+            if (moneyDifference == 0) {
+                sendMoneyToRetired();
                 generalRecord.totalAmount = 0;
+                generalRecord
+            }
+            if (moneyDifference > 0) {
+                sendMoneyToRetired();
+                solvent += int(moneyDifference);
+                generalRecord.totalAmount = 0;
+            }
+            if (moneyDifference < 0) {
+                solvent -= 
             }
                         
             cutoffDate = block.timestamp;
@@ -241,21 +249,25 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    function sendMoneyToRetired(GeneralRecord memory _generalRecord) private {
-        RetairedRecord[] memory retiredRecordList =  _generalRecord.retairedRecords;
+    function sendMoneyToRetired() private {
+        RetairedRecord[] memory retiredRecordList =  generalRecord.retairedRecords;
         for (uint256 x = 0; x > retiredRecordList.length; x ++) {
             RetairedQuote[] memory retairedQuotelist = retiredRecordList[x].retairedQuotes;
             for (uint256 y = 0; y > retairedQuotelist.length; y ++) {
                 RetairedQuote memory retairedQuote = retairedQuotelist[y];
                 retairedQuote.owner.transfer(retairedQuote.monthlyQuote);
-                //(bool output, bytes memory response) = retairedQuote.owner{value:retairedQuote.monthlyQuote/*, gas: 200000*/}("");
+                //(bool output, bytes memory response) = retairedQuote.owner.call{value:retairedQuote.monthlyQuote, gas: 200000}("");
                 retairedQuote.totalPaidQuotes += retairedQuote.monthlyQuote;
                 if (retairedQuote.totalPaidQuotes >= retairedQuote.totalPensionValue) {
                     delete retairedQuotelist[y];
+                    // _burn(retairedQuote.idToken); -- MVP
+                    if (retairedQuotelist.length == 0) {
+                        generalRecord.totalToPay -= retiredRecordList[x].totalAmount;
+                        delete retiredRecordList[x];
+                    }
                 }
             }
         }
-
     }
 
     // ************************ //
@@ -311,10 +323,11 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
-        transferFrom(msg.sender, _to, _pensionId);
-        ownerPensionsBalance[payable(msg.sender)][_pensionId].owner = _to;
-    }
+    // MVP
+    // function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
+    //     transferFrom(msg.sender, _to, _pensionId);
+    //     ownerPensionsBalance[payable(msg.sender)][_pensionId].owner = payable(_to);
+    // }
 
     // -- Docs
     // -- Testing --
