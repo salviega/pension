@@ -14,8 +14,14 @@ import { PensionRegister } from "../PensionRegister";
 import "./App.scss";
 import { Modal } from "../../shared/Modal";
 import { useSelector } from "react-redux";
+import { PensionContext } from '../PensionContext';
 
 function App() {
+  const {
+    items: generalBalance,
+    loading,
+    error,
+  } = React.useContext(PensionContext)
   const { modal, spinner } = useSelector((e) => e.ui);
 
   React.useEffect(() => {
@@ -44,7 +50,6 @@ function App() {
       });
     }
   }, []);
-
   return (
     <HashRouter>
       <div className="App__container">
@@ -52,7 +57,8 @@ function App() {
           <PensionWallet />
         </Header>
         <main>
-          <PensionLoading />
+          {error && 'Error...'}
+          {loading && <PensionLoading />}
           <Routes>
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />

@@ -13,7 +13,7 @@ async function main() {
         "pensioncontract": pension.address, 
     }
     let addressesJSON = JSON.stringify(addresses);
-    fs.writeFileSync("environment/contract-address.json", addressesJSON);
+    fs.writeFileSync("src/blockchain/environment/contract-address.json", addressesJSON);
 }
 
 main()

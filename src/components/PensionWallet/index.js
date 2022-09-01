@@ -3,16 +3,21 @@ import React from 'react';
 import { ethers } from 'ethers';
 import { useDispatch, useSelector } from 'react-redux';
 
-import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
-import proofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json';
-
 import {
   authRegistedAction,
   authUnregistedAction,
   authUnverifiedAction,
   authVerifiedAction,
 } from '../../store/actions/authAction';
+
 import { activeSpinnerAction, desactiveSpinnerAction } from '../../store/actions/uiAction';
+
+import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
+import jsonProofOfHumanityAddress from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-address.json';
+import pensionContractAbi from '../../blockchain/hardhat/artifacts/src/blockchain/hardhat/contracts/Pension.sol/Pension.json';
+import jsonPension from '../../blockchain/environment/contract-address.json';
+const pensionAddress = jsonPension.pensioncontract;
+const proofOfHumanityAddress = jsonProofOfHumanityAddress.proofofhumanity;
 
 function PensionWallet() {
   const [addressWallet, setAdressWallet] = React.useState('Connect your Wallet');
@@ -69,7 +74,7 @@ function PensionWallet() {
 
   const verifyInProofOfHumanity = async (wallet) => {
     const provider = ethers.providers.getDefaultProvider('mainnet');
-    const proofOfHumanityContract = new ethers.Contract(proofOfHumanityAddress.proofofhumanity, proofOfHumanityAbi, provider);
+    const proofOfHumanityContract = new ethers.Contract(proofOfHumanityAddress, proofOfHumanityAbi, provider);
     return await proofOfHumanityContract.isRegistered('0x1ddd73d60f92f4440377e27e9eecf8ea4c275ef6'); //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
   };
 
