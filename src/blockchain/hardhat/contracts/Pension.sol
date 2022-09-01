@@ -33,6 +33,7 @@ contract Pension is ERC721 {
     /* Struct */
 
     struct GeneralRecord {
+        int solvent;
         uint256 totalAmount;
         uint256 totalToPay;
         RetairedRecord[] retairedRecords;
@@ -94,7 +95,6 @@ contract Pension is ERC721 {
     mapping(uint256 => MonthlyRecord) public monthlyGeneralBalance;
     mapping(uint256 => RetairedRecord) public retairedBalance;
 
-    int public solvent;
     uint256 public cutoffDate;
     uint256[] private withdrawPensionList;
 
@@ -173,7 +173,6 @@ contract Pension is ERC721 {
     // -- Testing --
 
     function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(_pensionId) validAmount(msg.value, _amount) {
-        
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
         uint256 solidaryAmount = _amount * 73 / 100;
@@ -223,21 +222,20 @@ contract Pension is ERC721 {
             generalRecord.monthlyRecords.push(monthlyGeneralBalance[cutoffDate]);
             generalRecord.totalAmount += monthlyGeneralBalance[cutoffDate].totalAmount;
             generalRecord.totalToPay += retairedBalance[cutoffDate].totalToPay;
-            
             int moneyDifference = int(generalRecord.totalAmount) - int(generalRecord.totalToPay);
-            
+
             if (moneyDifference == 0) {
                 sendMoneyToRetired();
-                generalRecord.totalAmount = 0;
-                generalRecord
             }
             if (moneyDifference > 0) {
                 sendMoneyToRetired();
-                solvent += int(moneyDifference);
+                generalRecord.solvent += int(moneyDifference);
                 generalRecord.totalAmount = 0;
             }
             if (moneyDifference < 0) {
-                solvent -= 
+                 generalRecord.solvent -= -moneyDifference;
+                 generalRecord.totalAmount += uint256(-moneyDifference);
+                 sendMoneyToRetired();
             }
                         
             cutoffDate = block.timestamp;
@@ -256,13 +254,15 @@ contract Pension is ERC721 {
             for (uint256 y = 0; y > retairedQuotelist.length; y ++) {
                 RetairedQuote memory retairedQuote = retairedQuotelist[y];
                 retairedQuote.owner.transfer(retairedQuote.monthlyQuote);
-                //(bool output, bytes memory response) = retairedQuote.owner.call{value:retairedQuote.monthlyQuote, gas: 200000}("");
+                generalRecord.totalToPay -= retairedQuote.monthlyQuote;
+                generalRecord.totalAmount -= retairedQuote.monthlyQuote;
+                retairedQuote.owner.transfer(retairedQuote.monthlyQuote);
+                //(bool output, bytes memory response) = retairedQuote.owner.call{value:retairedQuote.monthlyQuote, gas: 200000}(""); -- MVP
                 retairedQuote.totalPaidQuotes += retairedQuote.monthlyQuote;
                 if (retairedQuote.totalPaidQuotes >= retairedQuote.totalPensionValue) {
                     delete retairedQuotelist[y];
                     // _burn(retairedQuote.idToken); -- MVP
                     if (retairedQuotelist.length == 0) {
-                        generalRecord.totalToPay -= retiredRecordList[x].totalAmount;
                         delete retiredRecordList[x];
                     }
                 }
@@ -323,7 +323,7 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    // MVP
+    // -- MVP
     // function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
     //     transferFrom(msg.sender, _to, _pensionId);
     //     ownerPensionsBalance[payable(msg.sender)][_pensionId].owner = payable(_to);
