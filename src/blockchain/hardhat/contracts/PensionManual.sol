@@ -221,7 +221,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     /** @dev Update cutoff date.
      * 
     */ 
-    function updateCutoffDate() private {
+    function updateCutoffDate() public {
             generalRecord.monthlyRecords.push(monthlyGeneralBalance[cutoffDate]);
             generalRecord.totalAmount += monthlyGeneralBalance[cutoffDate].totalAmount;
             generalRecord.totalToPay += retairedBalance[cutoffDate].totalToPay;
@@ -321,22 +321,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         }
         return 0;
     }
-
-    // ************************ //
-    // *       Keepers        * //
-    // ************************ //
-
-    function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory /* performData */) {
-        bool done;
-        upkeepNeeded = !done && ((block.timestamp - cutoffDate) > interval);
-    }
-
-    function performUpkeep(bytes calldata /* performData */) external override {
-        if ((block.timestamp - cutoffDate) > interval) {
-            updateCutoffDate();
-        }
-    }
-
     
     // ************************ //
     // *   Getters & Setters  * //
