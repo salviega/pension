@@ -230,7 +230,6 @@ contract Pension is ERC721 {
             if (moneyDifference > 0) {
                 sendMoneyToRetired();
                 generalRecord.solvent += int(moneyDifference);
-                generalRecord.totalAmount = 0;
             }
             if (moneyDifference < 0) {
                  generalRecord.solvent -= -moneyDifference;
