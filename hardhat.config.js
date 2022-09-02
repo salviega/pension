@@ -13,13 +13,13 @@ module.exports = {
     cache: './src/blockchain/hardhat/cache',
     artifacts: './src/blockchain/hardhat/artifacts'
   },
-  defaultNetwork: 'rinkeby',
+  defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
-      // If want to do some forking, uncomment this
-      // forking: {
-      //  url: MAINNET_RPC_URL
-      // }
+      forking: {
+        url: process.env.RINKEBY_RPC_URL,
+        blockNumber: 1439000
+      }
     },
     localhost: {},
     rinkeby: {

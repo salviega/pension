@@ -26,7 +26,7 @@ contract Pension is ERC721 {
     uint256 constant private interval = 30 days; //MVP
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
-    uint256 constant private mininumDeposit = 25 * 10 ** 18;
+    uint256 constant private mininumDeposit = 25;
     uint256 constant private retirentmentAge = 365 days * 61;
 
 
@@ -59,6 +59,7 @@ contract Pension is ERC721 {
         string biologySex;
         uint256 age;
         uint256 bornAge;
+        uint256 retirentmentDate;
         uint256 pensionCreatedTime;
         uint256 pensionId;
     }
@@ -102,15 +103,14 @@ contract Pension is ERC721 {
 
     // -- Docs
     // -- Testing --
-    modifier onlyOwner(uint256 _pension) {
-       require(msg.sender == ownerPensionsBalance[msg.sender][_pension].owner && msg.sender == ownerOf(_pension), "You don't own this pension"); 
+    modifier onlyOwner(address _owner, uint256 _pension) {
+       require(payable(_owner) == ownerPensionsBalance[_owner][_pension].owner && _owner == ownerOf(_pension), "You don't own this pension"); 
         _;}
 
     // -- Docs
     // -- Testing --
     modifier validAmount(uint256 _callvalue, uint256 _amount) {
         require(_callvalue >= mininumDeposit, "The amount doesn't reach the minimum required");
-        require(_callvalue == _amount, "You don't have this amount");
         _;
     }
 
@@ -138,7 +138,7 @@ contract Pension is ERC721 {
     
     // -- Docs
     // -- Testing --
-    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) validAmount(msg.value, _firstQuote) payable public {
+    function safeMint(string memory _biologySex, uint256 _age,  uint256 _bornAge, uint256 _firstQuote) payable public validAmount(msg.value, _firstQuote) {
         require(!verifyIfTheContributorAlreadyMint(msg.sender), "Already generated his pension");
         require(_age >= majorityAge, "You must be 18 years or older to generate a pension");
         uint256 age = _age * 365 days; 
@@ -148,15 +148,15 @@ contract Pension is ERC721 {
         pensionIdCounter.increment();
         _safeMint(msg.sender, pensionId);
 
-        DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, age, _bornAge,  pensionId, mintDate);       
-
-        uint256 timeRetirentment = retirentmentAge - age; 
-        uint256 retirentmentDate = mintDate + timeRetirentment; 
+        uint256 quoteTime = retirentmentAge - age; 
+        uint256 retirentmentDate = mintDate + quoteTime; 
         uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
-        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
         
+        DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId);       
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
         ownerPensionsBalance[msg.sender][pensionId] = newPension;
-        depositAmount(newPension.pensionId, _firstQuote);
+
+        firstDeposit(newPension.pensionId, _firstQuote);
         addressesThatAlreadyMinted[msg.sender] = true;
     }
 
@@ -165,6 +165,16 @@ contract Pension is ERC721 {
     // *       Quoutes        * //
     // ************************ //
 
+    // -- Docs
+    // -- Testing --
+    function firstDeposit(uint256 _pensionId, uint256 _firstQuote) private {
+        uint256 contributionDate = block.timestamp;
+        uint256 savingsAmount = _firstQuote * 23 / 100;
+        uint256 solidaryAmount = _firstQuote * 73 / 100;
+        solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
+        savingsBalance[msg.sender][_pensionId] += savingsAmount;
+        registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);
+    }
     /*
       * @dev depositar DAIs según la cantidad anual pactada en el minteo.
       *  @param _pensionId La pensión.
@@ -172,7 +182,7 @@ contract Pension is ERC721 {
     */
     // -- Testing --
 
-    function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(_pensionId) validAmount(msg.value, _amount) {
+    function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(msg.sender, _pensionId) validAmount(msg.value, _amount) {
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 23 / 100;
         uint256 solidaryAmount = _amount * 73 / 100;
@@ -303,7 +313,7 @@ contract Pension is ERC721 {
         return generalRecord;
     }
     
-    function getmonthlyBalanceFrommonthlyGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
+    function getMonthlyBalanceFromMonthlyGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
         return monthlyGeneralBalance[_cutoffDate];
     }
 
