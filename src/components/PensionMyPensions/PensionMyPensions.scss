@@ -1,0 +1,93 @@
+.my-pensions-container {
+    margin: auto;
+    max-width: 1050px;
+    align-content: start;
+    display: flex;    
+    gap: .5rem;
+    flex-wrap: wrap;
+    height: 100%;
+    padding: 1rem;
+
+    &__pensions-list {
+        flex-basis: 0;
+        flex-grow: 1;
+        min-width: min(100%, 300px);
+        border-radius: .5rem;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        height: max-content;
+        &__item{
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding: .5rem;
+            border-radius: .25rem;
+            background-color: rgb(206, 206, 206);
+            transition-timing-function: ease-in-out;
+            transition-duration: 200ms;
+            transition-property: transform;
+            cursor: pointer;
+            
+            
+            .pension-item__header{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                
+                &__pension-address{
+                    align-self: flex-end;
+                    font-weight: 400;
+                    font-size: .8rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-decoration: none;
+                    width: 5rem;
+                    color: rgb(36, 50, 62);
+                }
+                &__pension-name{
+                    font-size: 1.2rem;
+                    color: cornflowerblue;
+                }
+            }
+            .pension-item__title{
+                font-size: .9rem;
+                font-weight: normal;
+            }
+            .pension-item__value{
+            }
+        }
+        &__item > * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: rgb(60, 60, 60);
+        }
+        &__item:hover{
+            transform: translate(1px, -1px);
+            box-shadow: 0 0 4px rgba(0,0,0,0.15);
+        }
+    }
+    &__pensions-stadistic {
+        flex-basis: 0;
+        flex-grow: 1;
+        min-width: min(100%, 700px);
+        padding: 1rem;
+        border-radius: .25rem;
+        background-color: rgb(185, 150, 70);
+    }
+}
+
+@media (max-width: 700px){
+    .my-pensions-container {
+        
+        &__pensions-list {            
+            background-color: rgb(223, 155, 213);
+            height: max-content;
+            height: max-content;
+
+        }
+        &__pension-item{
+            background-color: rgb(155, 223, 191);
+        }
+    }
+}
+
