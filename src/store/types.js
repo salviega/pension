@@ -7,6 +7,9 @@ export const types = {
   // * UI-spinner
   uiSpinnerActive: '[UI] Spinner active',
   uiSpinnerDesactive: '[UI] Spinner desactive',
+  // * UI-sidebar
+  uiSidebarActive: '[UI] Sidebar active',
+  uiSidebarDesactive: '[UI] Sidebar desactive',
 
   // * AUTH
   authRegisted: '[AUTH] register account',
