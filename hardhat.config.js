@@ -1,4 +1,5 @@
 require('@nomiclabs/hardhat-waffle')
+require('@nomiclabs/hardhat-etherscan')
 require('dotenv').config()
 
 /**
@@ -12,6 +13,11 @@ module.exports = {
     tests: './src/blockchain/hardhat/test',
     cache: './src/blockchain/hardhat/cache',
     artifacts: './src/blockchain/hardhat/artifacts'
+  },
+  etherscan: {
+    apiKey: {
+      rinkeby: process.env.ETHERSCAN_API_KEY_TOKEN,
+    }
   },
   defaultNetwork: 'hardhat',
   networks: {
