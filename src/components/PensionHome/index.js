@@ -1,14 +1,17 @@
 import { Aside } from '../../shared/Aside';
+import { HomeForm } from './HomeForm';
 import './PensionHome.scss';
 
 function PensionHome() {
   return (
     <div className="home">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa iure nihil porro quisquam, explicabo saepe ad cum et
+        libero magnam, adipisci eveniet dolores! Aliquid, aspernatur numquam ut reprehenderit quasi impedit.
+      </p>
+
       <Aside>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto illum quos architecto, excepturi, id quo consequatur
-          nulla perferendis corporis ex aliquam. Tenetur pariatur, eveniet iste dolore nobis quo recusandae laboriosam.
-        </p>
+        <HomeForm />
       </Aside>
     </div>
   );

@@ -1,0 +1,32 @@
+.homeform {
+  width: 100%;
+  height: auto;
+  &__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0;
+    height: 2rem;
+  }
+  &__label {
+    margin-left: auto;
+  }
+  &__input {
+    width: 40%;
+    height: 100%;
+  }
+  &__submit {
+    cursor: pointer;
+    font-weight: bold;
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 3rem;
+    border-radius: 0.5rem;
+
+    &:hover {
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
