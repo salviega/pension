@@ -115,6 +115,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
     /* Events */
 
+    event depositContributor(address contributorAddress, uint256 contributorAmount, uint256 timeDeposit);
 
     /** @dev Constructor
      *  
@@ -185,6 +186,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pension.pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pension.pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);
+
+        emit depositContributor(_pension.owner, _firstQuote, _pension.pensionCreatedTime);
     }
 
     // -- Testing --
@@ -201,6 +204,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pensionId], _amount, contributionDate, savingsAmount, solidaryAmount);
+
+        emit depositContributor(ownerPensionsBalance[msg.sender][_pensionId].owner, _amount, contributionDate);
     }
 
     // -- Testing --

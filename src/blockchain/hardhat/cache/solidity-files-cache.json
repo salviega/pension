@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\santiago.viana\\pension-frontend\\src\\blockchain\\hardhat\\contracts\\Pension.sol": {
-      "lastModificationDate": 1662163037310,
-      "contentHash": "e1bf5dbf6b1f66bb7cef0f24fdfcbd24",
+      "lastModificationDate": 1662227224664,
+      "contentHash": "338995d60846c3d02a4c872c8332df8c",
       "sourceName": "src/blockchain/hardhat/contracts/Pension.sol",
       "solcConfig": {
         "version": "0.8.9",
