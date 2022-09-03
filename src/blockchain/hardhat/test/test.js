@@ -22,7 +22,7 @@ describe("Pension Contract", () => {
     const { owner, deployed } = await setup();
     await deployed.safeMint("male", 26, 1996, 30, { value: ethers.utils.parseEther("1") });
 
-    const alreadyMinted = await deployed.verifyIfTheContributorAlreadyMint(owner)
+    const alreadyMinted = await deployed.verifyIfTheContributorAlreadyMinted(owner)
     // eslint-disable-next-line no-unused-expressions
     expect(alreadyMinted).to.be.true;
   })

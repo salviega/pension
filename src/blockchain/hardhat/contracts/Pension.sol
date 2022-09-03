@@ -23,7 +23,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     uint256 constant private interval = 30 days; //MVP
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
-    uint256 constant private mininumDeposit = 25;
+    uint256 constant private mininumDeposit = 25; // wai
     uint256 constant private retirentmentAge = 365 days * 61;
 
     /* Struct */
@@ -284,7 +284,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     }
 
     // -- Testing --
-    /** @dev Generate new retirees.
+    /** @dev Register new retirees.
      * @param _pension The pension that will be for the retaired.
      * @param _retirentmentDate Retirentment date.
     */
@@ -300,9 +300,9 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         retairedBalance[_retirentmentDate].retairedQuotes.push(newRetaired);
     }
 
-    // -- Docs
-    // -- Testing
     // -- MVP
+    // -- Testing
+    // -- Docs
     // function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
     //     transferFrom(msg.sender, _to, _pensionId);
     //     ownerPensionsBalance[payable(msg.sender)][_pensionId].owner = payable(_to);

@@ -2,7 +2,6 @@
 
 pragma solidity >=0.7.0 <=0.8.14;
 
-import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
@@ -13,7 +12,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  *  
  */
 
-contract Pension is ERC721, KeeperCompatibleInterface {
+contract PensionManual is ERC721 {
     using Counters for Counters.Counter;
 
     Counters.Counter public pensionIdCounter;
