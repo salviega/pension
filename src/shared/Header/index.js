@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 function Header(props) {
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
 
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
   const handleShow = () => {
     setShowMenu((show) => !show);
   };
@@ -29,7 +29,7 @@ function Header(props) {
               <div className="icon__item"></div>
               <div className="icon__item"></div>
             </div>
-            <div className={`main-nav__links ${showMenu ? 'main-nav__links--show' : ''}`} onClick={handleShow}>
+            <div className={`main-nav__links ${showMenu && 'main-nav__links--show'}`} onClick={handleShow}>
               <div className="main-nav__container">
                 <li className="main-nav__item">
                   <NavLink to="/" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>

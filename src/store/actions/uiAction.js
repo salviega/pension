@@ -9,3 +9,7 @@ export const unloadDataModalAction = () => ({ type: types.uiModalUnloadDara, pay
 // * Spinner
 export const activeSpinnerAction = () => ({ type: types.uiSpinnerActive });
 export const desactiveSpinnerAction = () => ({ type: types.uiSpinnerDesactive });
+
+// * Sidebar
+export const activeSidebarAction = () => ({ type: types.uiSidebarActive });
+export const desactiveSidebarAction = () => ({ type: types.uiSidebarDesactive });

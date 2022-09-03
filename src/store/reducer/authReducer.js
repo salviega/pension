@@ -5,7 +5,7 @@ const initialState = {
   isVerified: false,
 };
 
-export const uiAuth = (state = initialState, action) => {
+export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.authRegisted:
       return { ...state, isRegisted: true };

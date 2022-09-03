@@ -6,6 +6,7 @@ const initialState = {
     data: null,
   },
   spinner: { isActive: false },
+  sidebar: { isActive: false },
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -29,6 +30,13 @@ export const uiReducer = (state = initialState, action) => {
 
     case types.uiSpinnerDesactive:
       return { ...state, spinner: { ...state.spinner, isActive: false } };
+
+    // * Sidebar
+    case types.uiSidebarActive:
+      return { ...state, sidebar: { ...state.sidebar, isActive: true } };
+
+    case types.uiSidebarDesactive:
+      return { ...state, sidebar: { ...state.sidebar, isActive: false } };
 
     default:
       return state;
