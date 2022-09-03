@@ -14,13 +14,7 @@ const Aside = ({ children }) => {
     dispatch(desactiveSidebarAction());
   };
   return (
-    <aside
-      className={`aside ${sidebar.isActive && 'aside--show'}`}
-      onClick={handleActive}
-      onFocusCapture={() => {
-        console.log('holfddsf');
-      }}
-    >
+    <aside className={`aside ${sidebar.isActive && 'aside--show'}`} onClick={handleActive}>
       <div className="aside__container">
         <button className="aside__btn" onClick={handleClose}>
           Close
