@@ -24,7 +24,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
     uint256 constant private mininumDeposit = 25; // wai
-    uint256 constant private retirentmentAge = 365 days * 61;
+    uint256 constant public retirentmentAge = 365 days * 61;
 
     /* Struct */
     struct GeneralRecord {
@@ -367,6 +367,14 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     function getMonthlyBalanceFromMonthlyGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
         return monthlyGeneralBalance[_cutoffDate];
     }
+
+    /** @dev Get the pensions balance of msg.sender.
+     * @param _pensionId Id of pension
+    */
+    function getOwnerPensionsBalance(uint256 _pensionId) view public returns(DataPension memory) {
+        return ownerPensionsBalance[msg.sender][_pensionId];
+    }
+
 
     // ************************ //
     // *        Utils         * //

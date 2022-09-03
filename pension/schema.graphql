@@ -1,0 +1,7 @@
+type depositContributor @entity {
+  id: ID!
+  contributorAddress: String!
+  contributorAmount: BigInt!
+  timeDeposit: BigInt!
+}
+
