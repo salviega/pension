@@ -115,7 +115,27 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
     /* Events */
 
-    event depositContributor(address contributorAddress, uint256 contributorAmount, uint256 timeDeposit);
+    /** @dev RegisterQuote Emited when it is created a pension.
+     * @param _owner contributor address.
+     * @param _biologySex Gamete production of the contributor.
+     * @param _age Contributor age.
+     * @param _bornAge birth of date.
+     * @param _retirentmentDate Retairment date of the contributor.
+     * @param _pensionCreatedTime Mintend pension date.
+     * @param _pensionId Pension ID.
+    */
+    event RegisterPension(address indexed _owner, string _biologySex, uint256 _age, uint256 _bornAge, uint256 _retirentmentDate, uint256 _pensionCreatedTime, uint256 indexed _pensionId); 
+    
+    /** @dev RegisterQuote Emited when a contribuitor does to deposit
+     * @param _owner contributor address.
+     * @param _id Id that identify the transaction.
+     * @param _contributionDate Contribution date.
+     * @param _savingAmount Salving Regime's deposit.
+     * @param _solidaryAmount Solidary Regime's deposit.
+     * @param _totalAmount Total deposit. 
+    */
+    event RegisterQuote(address indexed _owner, bytes32 indexed _id, DataPension _dataPension, uint256 _contributionDate, uint256 _savingAmount, uint256 _solidaryAmount, uint256 _totalAmount);
+
 
     /** @dev Constructor
      *  
@@ -158,6 +178,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         
         cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(ownerPensionsBalance[msg.sender][pensionId]);  
         addressesThatAlreadyMinted[msg.sender] = true;
+
+        emit RegisterPension(msg.sender, _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId);
     }
 
     /** @dev Verify if the contributor already minted your pension.
@@ -186,8 +208,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pension.pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pension.pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);
-
-        emit depositContributor(_pension.owner, _firstQuote, _pension.pensionCreatedTime);
     }
 
     // -- Testing --
@@ -204,8 +224,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pensionId], _amount, contributionDate, savingsAmount, solidaryAmount);
-
-        emit depositContributor(ownerPensionsBalance[msg.sender][_pensionId].owner, _amount, contributionDate);
     }
 
     // -- Testing --
@@ -220,6 +238,9 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         bytes32 id = keccak256(abi.encodePacked(_contributionDate));
         monthlyGeneralBalance[cutoffDate].totalAmount += _totalAmount;
         monthlyGeneralBalance[cutoffDate].monthlyQuotes.push(MonthlyQuote(payable(_pension.owner), id, _pension, _contributionDate, _savingsAmount, _solidaryAmount,  _totalAmount));
+        
+        emit RegisterQuote(_pension.owner, id, _pension, _contributionDate, _savingsAmount, _solidaryAmount,  _totalAmount);
+
     }
 
     // -- Testing --

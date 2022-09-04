@@ -2,7 +2,13 @@ import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
 function getSubGraphData() {
   const url = 'https://api.studio.thegraph.com/query/32331/pension/0.0.5';
-  const depositQuery = `
+  
+  const client = new ApolloClient({
+    uri: url,
+    cache: new InMemoryCache(),
+  })
+  
+  const queryDeposit = `
     query {
       depositContributors {
         id
@@ -12,18 +18,29 @@ function getSubGraphData() {
       }
     }
   `
-  const client = new ApolloClient({
-    uri: url,
-    cache: new InMemoryCache(),
-  })
   
+  const queryAllElementsByAddress = `
+    query {
+      depositContributors(String: address) {
+        contributorAmount
+        timeDeposit
+      }
+    }
+  `
   const getAllItems = async () => {
-    const response = await client.query({ query: gql(depositQuery) }) 
+    const response = await client.query({ query: gql(queryDeposit) }) 
+    return response.data.depositContributors
+  }
+
+  const getAllElementsByItem = async (address) => {
+    let ownerAddress = address
+    const response = await client.query({ query: gql(queryAllElementsByAddress), variables: ownerAddress})
     return response.data.depositContributors
   }
 
   return {
-    getAllItems
+    getAllItems,
+    getAllElementsByItem
   }
 }
 

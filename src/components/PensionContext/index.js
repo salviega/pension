@@ -19,7 +19,6 @@ function PensionProvider (props) {
     try {
       //const result = await getAllItems()
       const result = await getAllDeposits();
-      console.log(result)
       setItems(result)
       setLoading(false)
     } catch (error) {
