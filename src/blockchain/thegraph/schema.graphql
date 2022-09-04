@@ -4,4 +4,3 @@ type depositContributor @entity {
   contributorAmount: BigInt!
   timeDeposit: BigInt!
 }
-

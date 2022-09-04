@@ -114,7 +114,7 @@ export class depositContributor__Params {
   }
 }
 
-export class Contract__checkUpkeepResult {
+export class Pension__checkUpkeepResult {
   value0: boolean;
   value1: Bytes;
 
@@ -139,7 +139,7 @@ export class Contract__checkUpkeepResult {
   }
 }
 
-export class Contract__getGeneralRecordResultValue0Struct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0Struct extends ethereum.Tuple {
   get solvent(): BigInt {
     return this[0].toBigInt();
   }
@@ -153,23 +153,23 @@ export class Contract__getGeneralRecordResultValue0Struct extends ethereum.Tuple
   }
 
   get retairedRecords(): Array<
-    Contract__getGeneralRecordResultValue0RetairedRecordsStruct
+    Pension__getGeneralRecordResultValue0RetairedRecordsStruct
   > {
     return this[3].toTupleArray<
-      Contract__getGeneralRecordResultValue0RetairedRecordsStruct
+      Pension__getGeneralRecordResultValue0RetairedRecordsStruct
     >();
   }
 
   get monthlyRecords(): Array<
-    Contract__getGeneralRecordResultValue0MonthlyRecordsStruct
+    Pension__getGeneralRecordResultValue0MonthlyRecordsStruct
   > {
     return this[4].toTupleArray<
-      Contract__getGeneralRecordResultValue0MonthlyRecordsStruct
+      Pension__getGeneralRecordResultValue0MonthlyRecordsStruct
     >();
   }
 }
 
-export class Contract__getGeneralRecordResultValue0RetairedRecordsStruct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0RetairedRecordsStruct extends ethereum.Tuple {
   get totalAmount(): BigInt {
     return this[0].toBigInt();
   }
@@ -179,15 +179,15 @@ export class Contract__getGeneralRecordResultValue0RetairedRecordsStruct extends
   }
 
   get retairedQuotes(): Array<
-    Contract__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct
+    Pension__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct
   > {
     return this[2].toTupleArray<
-      Contract__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct
+      Pension__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct
     >();
   }
 }
 
-export class Contract__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0RetairedRecordsRetairedQuotesStruct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -209,21 +209,21 @@ export class Contract__getGeneralRecordResultValue0RetairedRecordsRetairedQuotes
   }
 }
 
-export class Contract__getGeneralRecordResultValue0MonthlyRecordsStruct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0MonthlyRecordsStruct extends ethereum.Tuple {
   get totalAmount(): BigInt {
     return this[0].toBigInt();
   }
 
   get monthlyQuotes(): Array<
-    Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct
+    Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct
   > {
     return this[1].toTupleArray<
-      Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct
+      Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct
     >();
   }
 }
 
-export class Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesStruct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -232,9 +232,9 @@ export class Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesSt
     return this[1].toBytes();
   }
 
-  get dataPension(): Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct {
+  get dataPension(): Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct {
     return changetype<
-      Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct
+      Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct
     >(this[2].toTuple());
   }
 
@@ -255,7 +255,7 @@ export class Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesSt
   }
 }
 
-export class Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct extends ethereum.Tuple {
+export class Pension__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDataPensionStruct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -293,21 +293,21 @@ export class Contract__getGeneralRecordResultValue0MonthlyRecordsMonthlyQuotesDa
   }
 }
 
-export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct extends ethereum.Tuple {
+export class Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct extends ethereum.Tuple {
   get totalAmount(): BigInt {
     return this[0].toBigInt();
   }
 
   get monthlyQuotes(): Array<
-    Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct
+    Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct
   > {
     return this[1].toTupleArray<
-      Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct
+      Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct
     >();
   }
 }
 
-export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct extends ethereum.Tuple {
+export class Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesStruct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -316,9 +316,9 @@ export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Mon
     return this[1].toBytes();
   }
 
-  get dataPension(): Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct {
+  get dataPension(): Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct {
     return changetype<
-      Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct
+      Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct
     >(this[2].toTuple());
   }
 
@@ -339,7 +339,7 @@ export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Mon
   }
 }
 
-export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct extends ethereum.Tuple {
+export class Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0MonthlyQuotesDataPensionStruct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -377,7 +377,7 @@ export class Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Mon
   }
 }
 
-export class Contract__getOwnerPensionsBalanceResultValue0Struct extends ethereum.Tuple {
+export class Pension__getOwnerPensionsBalanceResultValue0Struct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -415,9 +415,9 @@ export class Contract__getOwnerPensionsBalanceResultValue0Struct extends ethereu
   }
 }
 
-export class Contract extends ethereum.SmartContract {
-  static bind(address: Address): Contract {
-    return new Contract("Contract", address);
+export class Pension extends ethereum.SmartContract {
+  static bind(address: Address): Pension {
+    return new Pension("Pension", address);
   }
 
   balanceOf(owner: Address): BigInt {
@@ -439,12 +439,12 @@ export class Contract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  checkUpkeep(param0: Bytes): Contract__checkUpkeepResult {
+  checkUpkeep(param0: Bytes): Pension__checkUpkeepResult {
     let result = super.call("checkUpkeep", "checkUpkeep(bytes):(bool,bytes)", [
       ethereum.Value.fromBytes(param0)
     ]);
 
-    return new Contract__checkUpkeepResult(
+    return new Pension__checkUpkeepResult(
       result[0].toBoolean(),
       result[1].toBytes()
     );
@@ -452,7 +452,7 @@ export class Contract extends ethereum.SmartContract {
 
   try_checkUpkeep(
     param0: Bytes
-  ): ethereum.CallResult<Contract__checkUpkeepResult> {
+  ): ethereum.CallResult<Pension__checkUpkeepResult> {
     let result = super.tryCall(
       "checkUpkeep",
       "checkUpkeep(bytes):(bool,bytes)",
@@ -463,7 +463,7 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Contract__checkUpkeepResult(value[0].toBoolean(), value[1].toBytes())
+      new Pension__checkUpkeepResult(value[0].toBoolean(), value[1].toBytes())
     );
   }
 
@@ -503,20 +503,20 @@ export class Contract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getGeneralRecord(): Contract__getGeneralRecordResultValue0Struct {
+  getGeneralRecord(): Pension__getGeneralRecordResultValue0Struct {
     let result = super.call(
       "getGeneralRecord",
       "getGeneralRecord():((int256,uint256,uint256,(uint256,uint256,(address,uint256,uint256,uint256,uint256)[])[],(uint256,(address,bytes32,(address,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256,uint256)[])[]))",
       []
     );
 
-    return changetype<Contract__getGeneralRecordResultValue0Struct>(
+    return changetype<Pension__getGeneralRecordResultValue0Struct>(
       result[0].toTuple()
     );
   }
 
   try_getGeneralRecord(): ethereum.CallResult<
-    Contract__getGeneralRecordResultValue0Struct
+    Pension__getGeneralRecordResultValue0Struct
   > {
     let result = super.tryCall(
       "getGeneralRecord",
@@ -528,7 +528,7 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Contract__getGeneralRecordResultValue0Struct>(
+      changetype<Pension__getGeneralRecordResultValue0Struct>(
         value[0].toTuple()
       )
     );
@@ -536,7 +536,7 @@ export class Contract extends ethereum.SmartContract {
 
   getMonthlyBalanceFromMonthlyGeneralBalance(
     _cutoffDate: BigInt
-  ): Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct {
+  ): Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct {
     let result = super.call(
       "getMonthlyBalanceFromMonthlyGeneralBalance",
       "getMonthlyBalanceFromMonthlyGeneralBalance(uint256):((uint256,(address,bytes32,(address,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256),uint256,uint256,uint256,uint256)[]))",
@@ -544,14 +544,14 @@ export class Contract extends ethereum.SmartContract {
     );
 
     return changetype<
-      Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
+      Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
     >(result[0].toTuple());
   }
 
   try_getMonthlyBalanceFromMonthlyGeneralBalance(
     _cutoffDate: BigInt
   ): ethereum.CallResult<
-    Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
+    Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
   > {
     let result = super.tryCall(
       "getMonthlyBalanceFromMonthlyGeneralBalance",
@@ -564,28 +564,28 @@ export class Contract extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       changetype<
-        Contract__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
+        Pension__getMonthlyBalanceFromMonthlyGeneralBalanceResultValue0Struct
       >(value[0].toTuple())
     );
   }
 
   getOwnerPensionsBalance(
     _pensionId: BigInt
-  ): Contract__getOwnerPensionsBalanceResultValue0Struct {
+  ): Pension__getOwnerPensionsBalanceResultValue0Struct {
     let result = super.call(
       "getOwnerPensionsBalance",
       "getOwnerPensionsBalance(uint256):((address,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(_pensionId)]
     );
 
-    return changetype<Contract__getOwnerPensionsBalanceResultValue0Struct>(
+    return changetype<Pension__getOwnerPensionsBalanceResultValue0Struct>(
       result[0].toTuple()
     );
   }
 
   try_getOwnerPensionsBalance(
     _pensionId: BigInt
-  ): ethereum.CallResult<Contract__getOwnerPensionsBalanceResultValue0Struct> {
+  ): ethereum.CallResult<Pension__getOwnerPensionsBalanceResultValue0Struct> {
     let result = super.tryCall(
       "getOwnerPensionsBalance",
       "getOwnerPensionsBalance(uint256):((address,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
@@ -596,7 +596,7 @@ export class Contract extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Contract__getOwnerPensionsBalanceResultValue0Struct>(
+      changetype<Pension__getOwnerPensionsBalanceResultValue0Struct>(
         value[0].toTuple()
       )
     );
