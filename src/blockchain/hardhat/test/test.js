@@ -95,7 +95,7 @@ describe("Pension Contract", () => {
     const secondamount = 40;
     await deployed.safeMint("male", 26, 1996, firstamount, { value: ethers.utils.parseUnits(firstamount.toString(),"wei") });
     await expect(deployed.connect(addr1).depositAmount(0,secondamount,{ value: ethers.utils.parseUnits(secondamount.toString(),"wei") }))
-    .to.be.revertedWith('You don\'t own this pension');;
+    .to.be.revertedWith('You don\'t own this pension');
   })
 
 
