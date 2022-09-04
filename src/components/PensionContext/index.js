@@ -24,6 +24,8 @@ function PensionProvider (props) {
       setLoading(false)
     } catch (error) {
       setError(error)
+      setLoading(false);
+      console.log(error)
     }
   }
 

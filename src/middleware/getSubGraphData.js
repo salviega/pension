@@ -1,11 +1,12 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
 function getSubGraphData() {
-  const url = 'https://api.studio.thegraph.com/query/33980/pension/0.0.21';
+  const url = 'https://api.studio.thegraph.com/query/32331/pension/0.0.5';
   const depositQuery = `
     query {
-      depositContributor {
+      depositContributors {
         id
+        contributorAddress
         contributorAmount
         timeDeposit
       }
@@ -17,13 +18,8 @@ function getSubGraphData() {
   })
   
   const getAllItems = async () => {
-    try {
-      const data = await client.query({ query: gql(depositQuery) })
-      console.log( 'Subgraph data: ', data)
-      return data;
-    } catch(error) {
-      console.log('Error fetching data: ', error);
-    }
+    const response = await client.query({ query: gql(depositQuery) }) 
+    return response.data.depositContributors
   }
 
   return {

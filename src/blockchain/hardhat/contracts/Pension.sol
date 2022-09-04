@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  *  @title Pension
  *  
  *  NOTE: 
- *  
+ * 
  */
 
 contract Pension is ERC721, KeeperCompatibleInterface {
@@ -153,10 +153,10 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
         
         DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId, 0, 0);       
+        ownerPensionsBalance[msg.sender][pensionId] = newPension;
         firstDeposit(newPension, _firstQuote);
         
-        ownerPensionsBalance[msg.sender][pensionId] = newPension;
-        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(ownerPensionsBalance[msg.sender][pensionId]);  
         addressesThatAlreadyMinted[msg.sender] = true;
     }
 

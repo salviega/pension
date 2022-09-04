@@ -15,6 +15,7 @@ import "./App.scss";
 import { Modal } from "../../shared/Modal";
 import { useSelector } from "react-redux";
 import { PensionContext } from '../PensionContext';
+import { PensionError } from '../PensionError';
 
 function App() {
   const {
@@ -57,7 +58,7 @@ function App() {
           <PensionWallet />
         </Header>
         <main>
-          {error && 'Error...'}
+          {error && <PensionError />}
           {loading && <PensionLoading />}
           <Routes>
             <Route path="/" element={<PensionHome />} />

@@ -12,7 +12,7 @@ async function main() {
     //Create the environment file with the start contract addresses.
     let addresses = {
         "pensioncontract": pension.address, 
-        "blocknumberr": await pension.provider.getBlockNumber()
+        "blocknumber": await pension.provider.getBlockNumber()
     }
     let addressesJSON = JSON.stringify(addresses);
     fs.writeFileSync("src/blockchain/environment/contract-address.json", addressesJSON);
