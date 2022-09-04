@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { desactiveSidebarAction, uiUpdateHomeChartAction } from '../../../store/actions/uiAction';
 import { getPensionFake } from '../../../utils/getPensionFake';
+import { calculatePensionProjection } from '../calculatePensionProjection';
 
 export const HomeForm = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,9 @@ export const HomeForm = () => {
   const { userAge, monthlySalary, userGender, birthdate } = values;
 
   const handleSubmit = (e) => {
-    console.log(values);
+    // console.log(values);
+    console.log(calculatePensionProjection(values));
+
     e.preventDefault();
     dispatch(desactiveSidebarAction());
     dispatch(uiUpdateHomeChartAction(getPensionFake(values)));

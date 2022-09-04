@@ -15,7 +15,7 @@ function PensionProvider (props) {
   const joinData = async () => {
     try {
       const result = await getAllItems()
-      console.log(result)
+      // console.log(result)
       setItems(result)
       setLoading(false)
     } catch (error) {
