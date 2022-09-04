@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CardItem } from './Card/CardItem';
 
 import './PensionAbout.scss';
-import data_team from '../../asserts/json/data-team.json';
+import data_team from '../../asserts/json/team-data.json';
 
 function PensionAbout() {
   const [cards, setCards] = useState([]);

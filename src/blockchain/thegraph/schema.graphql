@@ -1,4 +1,4 @@
-type depositContributor @entity {
+type DepositContributor @entity {
   id: ID!
   contributorAddress: String!
   contributorAmount: BigInt!

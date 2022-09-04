@@ -16,7 +16,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      rinkeby: process.env.ETHERSCAN_API_KEY_TOKEN,
+      rinkeby: process.env.ETHERSCAN_API_KEY,
     }
   },
   defaultNetwork: 'hardhat',
@@ -24,7 +24,7 @@ module.exports = {
     hardhat: {
       forking: {
         url: process.env.RINKEBY_RPC_URL,
-        blockNumber: 1439000
+        blockNumber: 11321611
       }
     },
     localhost: {},
