@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  *  @title Pension
  *  
  *  NOTE: 
- * 
+ *  
  */
 
 contract Pension is ERC721, KeeperCompatibleInterface {
@@ -188,10 +188,10 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
         
         DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId, 0, 0);       
+        
         ownerPensionsBalance[msg.sender][pensionId] = newPension;
         firstDeposit(newPension, _firstQuote);
-        
-        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(ownerPensionsBalance[msg.sender][pensionId]);  
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
         addressesThatAlreadyMinted[msg.sender] = true;
 
         emit RegisterPension(msg.sender, _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId);
@@ -217,7 +217,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     function firstDeposit(DataPension memory _pension, uint256 _firstQuote) private {
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _firstQuote * 24 / 100;
-        uint256 solidaryAmount = _firstQuote - savingsAmount; // 76%
+        uint256 solidaryAmount = _firstQuote - savingsAmount; // 76 % 
         _pension.totalSavings += savingsAmount;
         _pension.totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
@@ -233,7 +233,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(msg.sender, _pensionId) validAmount(msg.value) {
         uint256 contributionDate = block.timestamp;
         uint256 savingsAmount = _amount * 24 / 100;
-        uint256 solidaryAmount = _amount - savingsAmount; // 76%
+        uint256 solidaryAmount = _amount - savingsAmount;
 
         ownerPensionsBalance[msg.sender][_pensionId].totalSavings += savingsAmount;
         ownerPensionsBalance[msg.sender][_pensionId].totalSolidary += solidaryAmount;
@@ -263,7 +263,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     /** @dev Update cutoff date.
      * 
     */ 
-    function updateCutoffDate() private {
+    function updateCutoffDate() public { //MVP public for testing purposes
             generalRecord.monthlyRecords.push(monthlyGeneralBalance[cutoffDate]);
             generalRecord.totalAmount += monthlyGeneralBalance[cutoffDate].totalAmount;
             generalRecord.totalToPay += retairedBalance[cutoffDate].totalToPay;
