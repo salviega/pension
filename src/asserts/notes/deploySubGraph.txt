@@ -1,6 +1,7 @@
 Step by Step: Deploy a subgraph.
 
 npx hardhat compile
+npx hardhat run --network rinkeby src\blockchain\hardhat\contracts\Pension.sol
 npx hardhat verify --network rinkeby <AddressContract>
 -- go to the graph studio and create a subgraph project
 
