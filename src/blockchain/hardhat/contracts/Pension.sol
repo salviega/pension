@@ -201,8 +201,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function firstDeposit(DataPension memory _pension, uint256 _firstQuote) private {
         uint256 contributionDate = block.timestamp;
-        uint256 savingsAmount = _firstQuote * 23 / 100;
-        uint256 solidaryAmount = _firstQuote * 73 / 100;
+        uint256 savingsAmount = _firstQuote * 24 / 100;
+        uint256 solidaryAmount = _firstQuote - savingsAmount; // 76%
         _pension.totalSavings += savingsAmount;
         _pension.totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
@@ -217,8 +217,9 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(msg.sender, _pensionId) validAmount(msg.value) {
         uint256 contributionDate = block.timestamp;
-        uint256 savingsAmount = _amount * 23 / 100;
-        uint256 solidaryAmount = _amount * 73 / 100;
+        uint256 savingsAmount = _amount * 24 / 100;
+        uint256 solidaryAmount = _amount - savingsAmount; // 76%
+
         ownerPensionsBalance[msg.sender][_pensionId].totalSavings += savingsAmount;
         ownerPensionsBalance[msg.sender][_pensionId].totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
