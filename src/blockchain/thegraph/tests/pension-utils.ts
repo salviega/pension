@@ -5,7 +5,7 @@ import {
   ApprovalForAll,
   Transfer,
   depositContributor
-} from "../generated/Contract/Contract"
+} from "../generated/Pension/Pension"
 
 export function createApprovalEvent(
   owner: Address,

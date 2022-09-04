@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { ExampleEntity } from "../generated/schema"
-import { Approval } from "../generated/Contract/Contract"
-import { handleApproval } from "../src/contract"
-import { createApprovalEvent } from "./contract-utils"
+import { Approval } from "../generated/Pension/Pension"
+import { handleApproval } from "../src/pension"
+import { createApprovalEvent } from "./pension-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
