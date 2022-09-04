@@ -13,3 +13,5 @@ export const desactiveSpinnerAction = () => ({ type: types.uiSpinnerDesactive })
 // * Sidebar
 export const activeSidebarAction = () => ({ type: types.uiSidebarActive });
 export const desactiveSidebarAction = () => ({ type: types.uiSidebarDesactive });
+
+export const uiUpdateHomeChartAction = (data) => ({ type: types.uiUpdateHomeChart, payload: data });

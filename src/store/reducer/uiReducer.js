@@ -1,3 +1,4 @@
+import { getPensionFake } from '../../utils/getPensionFake';
 import { types } from '../types';
 
 const initialState = {
@@ -7,6 +8,7 @@ const initialState = {
   },
   spinner: { isActive: false },
   sidebar: { isActive: false },
+  homeChart: getPensionFake(),
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -37,6 +39,10 @@ export const uiReducer = (state = initialState, action) => {
 
     case types.uiSidebarDesactive:
       return { ...state, sidebar: { ...state.sidebar, isActive: false } };
+
+    // * charts
+    case types.uiUpdateHomeChart:
+      return { ...state, homeChart: { ...action.payload } };
 
     default:
       return state;

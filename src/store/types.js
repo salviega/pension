@@ -11,6 +11,8 @@ export const types = {
   uiSidebarActive: '[UI] Sidebar active',
   uiSidebarDesactive: '[UI] Sidebar desactive',
 
+  uiUpdateHomeChart: '[UI] update date from home',
+
   // * AUTH
   authRegisted: '[AUTH] register account',
   authUnregisted: '[AUTH] unregister account',

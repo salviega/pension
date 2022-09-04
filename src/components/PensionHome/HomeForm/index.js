@@ -2,51 +2,77 @@ import './HomeForm.scss';
 import { useForm } from '../../../hooks/useForm';
 import { useDispatch } from 'react-redux';
 
-import { desactiveSidebarAction } from '../../../store/actions/uiAction';
+import { desactiveSidebarAction, uiUpdateHomeChartAction } from '../../../store/actions/uiAction';
+import { getPensionFake } from '../../../utils/getPensionFake';
 
 export const HomeForm = () => {
   const dispatch = useDispatch();
+
   const [values, handleInputChange, reset] = useForm({
-    age: 0,
-    monthlyContribution: 0,
-    sex: 'male',
+    userAge: 0,
+    monthlySalary: 0,
+    userGender: 'male',
+    birthdate: '',
   });
 
-  const { age, monthlyContribution, sex } = values;
+  const { userAge, monthlySalary, userGender, birthdate } = values;
+
   const handleSubmit = (e) => {
     console.log(values);
     e.preventDefault();
     dispatch(desactiveSidebarAction());
+    dispatch(uiUpdateHomeChartAction(getPensionFake(values)));
     reset();
   };
 
   return (
     <form className="homeform" onSubmit={handleSubmit}>
       <div className="homeform__item">
-        <label htmlFor="age" className="homeform__label">
-          Age:
+        <label htmlFor="userAge" className="homeform__label">
+          userAge:
         </label>
-        <input type="number" min={0} id="age" className="homeform__input" name="age" value={age} onChange={handleInputChange} />
+        <input
+          type="number"
+          min={0}
+          id="userAge"
+          className="homeform__input"
+          name="userAge"
+          value={userAge}
+          onChange={handleInputChange}
+        />
       </div>
       <div className="homeform__item">
-        <label htmlFor="monthlyContribution" className="homeform__label">
+        <label htmlFor="monthlySalary" className="homeform__label">
           Monthly contribution:
         </label>
         <input
           type="number"
           min={0}
-          name="monthlyContribution"
-          id="monthlyContribution"
+          name="monthlySalary"
+          id="monthlySalary"
           className="homeform__input"
-          value={monthlyContribution}
+          value={monthlySalary}
           onChange={handleInputChange}
         />
       </div>
       <div className="homeform__item">
-        <label htmlFor="sex" className="homeform__label">
-          Sex:
+        <label htmlFor="birthdate" className="homeform__label">
+          Birth date:
         </label>
-        <select name="sex" id="sex" className="homeform__input" value={sex} onChange={handleInputChange}>
+        <input
+          type="date"
+          name="birthdate"
+          id="birthdate"
+          value={birthdate}
+          onChange={handleInputChange}
+          className="homeform__input"
+        />
+      </div>
+      <div className="homeform__item">
+        <label htmlFor="userGender" className="homeform__label">
+          userGender:
+        </label>
+        <select name="userGender" id="userGender" className="homeform__input" value={userGender} onChange={handleInputChange}>
           <option value="male" defaultValue>
             Male
           </option>
