@@ -24,7 +24,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
     uint256 constant private mininumDeposit = 25; // wai
-    uint256 constant private retirentmentAge = 365 days * 61;
+    uint256 constant public retirentmentAge = 365 days * 61;
 
     /* Struct */
     struct GeneralRecord {
@@ -115,6 +115,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
     /* Events */
 
+    event depositContributor(address contributorAddress, uint256 contributorAmount, uint256 timeDeposit);
 
     /** @dev Constructor
      *  
@@ -185,6 +186,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pension.pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pension.pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);
+
+        emit depositContributor(_pension.owner, _firstQuote, _pension.pensionCreatedTime);
     }
 
     // -- Testing --
@@ -201,6 +204,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pensionId], _amount, contributionDate, savingsAmount, solidaryAmount);
+
+        emit depositContributor(ownerPensionsBalance[msg.sender][_pensionId].owner, _amount, contributionDate);
     }
 
     // -- Testing --
@@ -362,6 +367,14 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     function getMonthlyBalanceFromMonthlyGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
         return monthlyGeneralBalance[_cutoffDate];
     }
+
+    /** @dev Get the pensions balance of msg.sender.
+     * @param _pensionId Id of pension
+    */
+    function getOwnerPensionsBalance(uint256 _pensionId) view public returns(DataPension memory) {
+        return ownerPensionsBalance[msg.sender][_pensionId];
+    }
+
 
     // ************************ //
     // *        Utils         * //
