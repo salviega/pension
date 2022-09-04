@@ -1,11 +1,11 @@
 import { BigInt, Address } from "@graphprotocol/graph-ts"
 import {
-  Contract,
+  Pension,
   Approval,
   ApprovalForAll,
   Transfer,
   depositContributor
-} from "../generated/Contract/Contract";
+} from "../generated/Pension/Pension";
 
 import {depositContributor as _depositContributor}  from "../generated/schema";
 
@@ -30,7 +30,7 @@ export function handledepositContributor(event: depositContributor): void {
     // Entity fields can be set based on event parameters
 
     entity.contributorAmount = event.params.contributorAmount
-    entity.timeDeposit = event.params.timeDeposit.plus(BigInt.fromI32(2))
+    entity.timeDeposit = event.params.timeDeposit
     entity.contributorAddress = event.params.contributorAddress.toHexString()
     
     // Entities can be written to the store with `.save()`

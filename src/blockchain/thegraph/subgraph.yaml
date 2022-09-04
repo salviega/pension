@@ -3,11 +3,11 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: Contract
+    name: Pension
     network: rinkeby
     source:
       address: "0x4098961b9b682c30Ac96b164Be7216abb5c227D3"
-      abi: Contract
+      abi: Pension
       startBlock: 11318692
     mapping:
       kind: ethereum/events
@@ -19,8 +19,8 @@ dataSources:
         - Transfer
         - depositContributor
       abis:
-        - name: Contract
-          file: ./abis/Contract.json
+        - name: Pension
+          file: ./abis/Pension.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
@@ -30,4 +30,4 @@ dataSources:
           handler: handleTransfer
         - event: depositContributor(address,uint256,uint256)
           handler: handledepositContributor
-      file: ./src/contract.ts
+      file: ./src/pension.ts
