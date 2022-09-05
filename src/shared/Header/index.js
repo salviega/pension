@@ -48,7 +48,7 @@ function Header(props) {
                     </NavLink>
                   </li>
                 )}
-                {isVerified && isRegisted && (
+                {isVerified && !isRegisted && (
                   <li className="main-nav__item">
                     <NavLink to="/register" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>
                       Register

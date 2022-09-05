@@ -21,7 +21,7 @@ import { authLoguotAction } from '../../store/actions/authAction';
 function App() {
   const dispatch = useDispatch();
 
-  const { items: generalBalance, loading, error } = React.useContext(PensionContext);
+  const { loading, error } = React.useContext(PensionContext);
   const { modal } = useSelector((e) => e.ui);
 
   React.useEffect(() => {
@@ -47,6 +47,7 @@ function App() {
       });
     }
   }, [dispatch]);
+  
   return (
     <HashRouter>
       <div className="App__container">

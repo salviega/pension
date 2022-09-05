@@ -11,7 +11,7 @@ function PensionRegister() {
     console.log(event.target.value);
   };
 
-  if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
+  if (!isVerified || isRegisted) return <Navigate replace to="/" />;
   return (
     <>
       <h2>Get your pension</h2>

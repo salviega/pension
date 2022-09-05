@@ -22,7 +22,6 @@ const proofOfHumanityAddress = jsonProofOfHumanityAddress.proofofhumanity;
 
 function PensionWallet() {
   const { wallet, isRegisted, isVerified } = useSelector(({ auth }) => auth);
-  // console.log(wallet);
 
   const [loading, setLoading] = React.useState(false);
 
@@ -42,8 +41,7 @@ function PensionWallet() {
       const walletAcount = accounts[0];
       dispatch(authloginAction(accounts[0]));
 
-      const verification = await verifyInProofOfHumanity(walletAcount);
-      console.warn(verification);
+      const verification = true //await verifyInProofOfHumanity(walletAcount);
       if (!verification) {
         alert('Your wallet is not registed in Proof of Humanity');
         return;
@@ -56,8 +54,17 @@ function PensionWallet() {
         setLoading(false);
         return;
       }
+
+      const mintVerification = await verifyMintInPension(walletAcount)
+      if(mintVerification) {
+        setLoading(false);
+        dispatch(authRegistedAction());
+        dispatch(authVerifiedAction());
+        return;
+      }
+
       setLoading(false);
-      dispatch(authRegistedAction());
+      dispatch(authUnregistedAction());
       dispatch(authVerifiedAction());
     } else {
       dispatch(authUnregistedAction());
@@ -73,12 +80,18 @@ function PensionWallet() {
     }
   };
 
+  const verifyMintInPension = async (wallet) => {
+    const provider = ethers.providers.getDefaultProvider('rinkeby')
+    const pensionContract = new ethers.Contract(pensionAddress, pensionContractAbi.abi, provider)
+
+    return await pensionContract.verifyIfTheContributorAlreadyMinted(wallet)
+  }
+
   const verifyInProofOfHumanity = async (wallet) => {
     const provider = ethers.providers.getDefaultProvider('mainnet');
     const proofOfHumanityContract = new ethers.Contract(proofOfHumanityAddress, proofOfHumanityAbi, provider);
-    console.warn(wallet);
 
-    return await proofOfHumanityContract.isRegistered('0x1ddd73d60f92f4440377e27e9eecf8ea4c275ef6'); //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
+    return await proofOfHumanityContract.isRegistered(wallet); //'0x918BD890FF76D2da0089Dbb086d258Da75960119'
   };
 
   return (

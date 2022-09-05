@@ -1,7 +1,4 @@
 import React from 'react'
-import { getData } from '../../middleware/getData.js'
-import { getSubGraphData } from '../../middleware/getSubGraphData.js';
-
 
 const PensionContext = React.createContext({
   currentUser: null
@@ -19,7 +16,6 @@ function PensionProvider (props) {
     } catch (error) {
       setError(error)
       setLoading(false);
-      console.log(error)
     }
   }
 
