@@ -8,58 +8,55 @@ import { PensionStadistic } from './PensionStadistic/PensionStadistic.js';
 import { getSubGraphData } from '../../middleware/getSubGraphData';
 
 function PensionMyPensions() {
-  const { getAllElementsByItem: getAllQuotesByAddress } = getSubGraphData();
+  const { getPensionByAddress, getAllQuotesByAddress } = getSubGraphData();
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
-
-  const [labels, setLabels] = useState([]);
-  const [data, setData] = useState([]);
+  
+  const [ data, setData] = useState([]);
+  const [ labels, setLabels] = useState([]);
+  const [ pensions, setPensions ] = useState([])
 
   const { wallet } = useSelector(({ auth }) => auth);
 
-  const mockPension = [
-    {
-      pensionAddress: '0x8f3ab4c0d4d41694fea84e30b1309b0628abdb99',
-      PensionName: 'Pension 1',
-      totalContributions: 100000,
-      totalReturns: 1300,
-    },
-    {
-      pensionAddress: '0xf0a3b9f19afc040c39a50001760ca1659fb7871b',
-      PensionName: 'Pension 2',
-      totalContributions: 300000,
-      totalReturns: 3600,
-    },
-  ];
-
   useEffect(() => {
-    const getData = async () => {
+
+    const getPension = async () => {
+      return await getPensionByAddress(wallet);
+    }; 
+
+    const getQuotes = async () => {
       return await getAllQuotesByAddress(wallet);
     };
 
-    getData().then((info) => {
+    getPension().then((info) => {
+      let arr = []
+      if (typeof info !== Array) {
+        arr.push(info)
+        setPensions(arr)
+        return;
+      }
+      setPensions(info)
+    })
+
+    getQuotes().then((info) => {
       const infoLavel = [];
       const infoData = [];
       for (const item of info) {
-        infoLavel.push(item.timeDeposit);
-        infoData.push(item.contributorAmount);
+        infoLavel.push(item.contributionDate);
+        infoData.push(item.totalAmount);
       }
       setData(infoData);
       setLabels(infoLavel);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet]);
-
-  useEffect(() => {
-    console.log({ labels, data });
-  }, [labels, data]);
 
   if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
 
   return (
     <div className="my-pensions-container">
       <div className="my-pensions-container__pensions-list">
-        {mockPension.map((pension) => (
-          <PensionOfUser key={pension.pensionAddress} {...pension}></PensionOfUser>
+        {pensions.map((pension, index) => (
+          <PensionOfUser key={index} {...pension}></PensionOfUser>
         ))}
       </div>
       <PensionStadistic labels={labels} data={data} />

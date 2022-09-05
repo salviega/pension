@@ -8,10 +8,9 @@ npx hardhat verify --network rinkeby <AddressContract>
 npm install -g @graphprotocol/graph-cli
 
 graph init --studio <SubGraphProjectName>
-graph auth --studio <ContractAddress>
 graph auth --studio <DeployKey>
 cd src/blockchain/thegraph
 graph codegen && graph build
-graph deploy --studio <ContractName>
+graph deploy --studio <SubGraphProjectName>
 
 

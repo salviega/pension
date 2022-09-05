@@ -8,8 +8,6 @@ const PensionContext = React.createContext({
 });
 
 function PensionProvider (props) {
-  const { getAllItems } = getData()
-  const { getAllItems: getAllDeposits } = getSubGraphData()
 
   const [items, setItems] = React.useState()
   const [loading, setLoading] = React.useState(true)
@@ -17,9 +15,6 @@ function PensionProvider (props) {
 
   const joinData = async () => {
     try {
-      //const result = await getAllItems()
-      const result = await getAllDeposits();
-      setItems(result)
       setLoading(false)
     } catch (error) {
       setError(error)

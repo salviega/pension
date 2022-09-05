@@ -1,49 +1,52 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
-function getSubGraphData() {
-  const url = 'https://api.studio.thegraph.com/query/32331/pension/0.0.5';
+export function getSubGraphData() {
+  const url = 'https://api.studio.thegraph.com/query/32331/pension2/v0.0.13/';
   
   const client = new ApolloClient({
     uri: url,
     cache: new InMemoryCache(),
   })
   
-  const queryDeposit = `
+  const queryPensionByAddress = `
     query {
-      depositContributors {
+      dataPensions(String: address) {
         id
-        contributorAddress
-        contributorAmount
-        timeDeposit
+        owner
+        biologySex
+        age
+        bornAge
+        retirentmentData
+        pensionCreatedTime
       }
     }
   `
-  
-  const queryAllElementsByAddress = `
+  const queryAllQuotesByAddress = `
     query {
-      depositContributors(String: address) {
-        contributorAmount
-        timeDeposit
+      contributorQuotes(String: address) {
+        id
+        owner
+        contributionDate
+        savingAmount
+        solidaryAmount
+        totalAmount
       }
     }
   `
-  const getAllItems = async () => {
-    const response = await client.query({ query: gql(queryDeposit) }) 
-    return response.data.depositContributors
+  const getPensionByAddress = async (address) => {
+    let owner = address
+    const response = await client.query({ query: gql(queryPensionByAddress), variables: owner})
+    return response.data.dataPensions[0]
   }
 
-  const getAllElementsByItem = async (address) => {
-    let ownerAddress = address
-    const response = await client.query({ query: gql(queryAllElementsByAddress), variables: ownerAddress})
-    return response.data.depositContributors
+  const getAllQuotesByAddress = async (address) => {
+    let owner = address
+    const response = await client.query({ query: gql(queryAllQuotesByAddress), variables: owner}) 
+    return response.data.contributorQuotes
   }
 
   return {
-    getAllItems,
-    getAllElementsByItem
+    getPensionByAddress,
+    getAllQuotesByAddress
   }
 }
-
-export { getSubGraphData }
-
-

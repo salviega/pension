@@ -414,7 +414,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         return ownerPensionsBalance[msg.sender][_pensionId];
     }
 
-
     // ************************ //
     // *        Utils         * //
     // ************************ //

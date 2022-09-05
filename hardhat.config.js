@@ -24,14 +24,12 @@ module.exports = {
     hardhat: {
       allowUnlimitedContractSize: true,
       forking: {
-        allowUnlimitedContractSize: true,
         url: process.env.RINKEBY_RPC_URL,
         blockNumber: 11321611
       }
     },
     localhost: {},
     rinkeby: {
-      allowUnlimitedContractSize: true,
       url: process.env.RINKEBY_RPC_URL,
       accounts: [process.env.PRIVATE_KEY],
       saveDeployments: true
