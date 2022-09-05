@@ -220,6 +220,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         uint256 solidaryAmount = _firstQuote - savingsAmount; // 76 % 
         _pension.totalSavings += savingsAmount;
         _pension.totalSolidary += solidaryAmount;
+        ownerPensionsBalance[msg.sender][_pension.pensionId].totalSavings += savingsAmount;
+        ownerPensionsBalance[msg.sender][_pension.pensionId].totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pension.pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pension.pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);

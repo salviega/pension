@@ -15,3 +15,12 @@ export const authVerifiedAction = () => ({
 export const authUnverifiedAction = () => ({
   type: types.authUnverified,
 });
+
+export const authloginAction = (wallet) => ({
+  type: types.authlogin,
+  payload: wallet,
+});
+
+export const authLoguotAction = () => ({
+  type: types.authLoguot,
+});

@@ -45,6 +45,9 @@
   &__rigth {
     float: right;
   }
+  &__links {
+    display: block;
+  }
 
   &__item {
     display: inline;
@@ -96,21 +99,52 @@
 }
 
 @media screen and (max-width: 650px) {
-  .icon {
-    display: flex;
-  }
-  .main-nav__links {
-    display: none;
-  }
+  .Header {
+    position: relative;
 
-  .main-nav__container {
-    background-color: white;
-    padding: 1rem;
-    border-radius: .5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 20rem;
-    
+    .icon {
+      display: flex;
+    }
+
+    .main-nav {
+      &__links {
+        position: fixed;
+        z-index: 20;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        left: 0;
+        top: 0;
+        transition: top 0.2s ease-in-out;
+        &--show {
+          top: -100vh;
+        }
+      }
+      &__container {
+        width: 250px;
+        margin-left: auto;
+        margin-right: 1rem;
+        margin-top: 4.5rem;
+        align-items: center;
+      }
+      .main-nav__container {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 20rem;
+      }
+
+      &__item {
+        display: block;
+        width: 100%;
+        & a {
+          display: block;
+          width: 70%;
+        }
+      }
+    }
   }
 }

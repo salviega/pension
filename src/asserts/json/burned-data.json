@@ -65,7 +65,7 @@
       ]
     }
   ],
-  
+
   "monthlyRecords": [
     {
       "totalAmount": 1000,
@@ -194,7 +194,6 @@
     {
       "totalAmount": 1000,
       "monthlyQuote": [
-
         {
           "owner": "0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678",
           "id": "1",

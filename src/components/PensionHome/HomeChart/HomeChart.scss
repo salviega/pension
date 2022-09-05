@@ -1,0 +1,20 @@
+.homechart {
+  // outline: 2px dotted black;
+  height: 56vh;
+  width: 100%;
+
+  display: grid;
+  grid-template-rows: 1fr 2rem;
+  gap: 2rem;
+
+  &__btn {
+    height: 2rem;
+    width: 15rem;
+    display: block;
+    margin: 0 auto;
+  }
+  &__chart{
+    outline: 2px solid black;
+    overflow-y: auto;
+  }
+}
