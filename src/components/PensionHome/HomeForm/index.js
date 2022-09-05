@@ -19,12 +19,17 @@ export const HomeForm = () => {
   const { userAge, monthlySalary, userGender, birthdate } = values;
 
   const handleSubmit = (e) => {
-    // console.log(values);
-    console.log(calculatePensionProjection(values));
+    const resultProjection = calculatePensionProjection(values)
+
+    const dataToChart = resultProjection.coutesTodo.reduce((chartData, currentItem) => {
+      chartData.labels.push(currentItem.couteNumber)
+      chartData.data.push(currentItem.accumulatedInvestmentFund + currentItem.accumulatedSolidaryFund)
+      return chartData
+    }, { labels: [], data: [] })
 
     e.preventDefault();
     dispatch(desactiveSidebarAction());
-    dispatch(uiUpdateHomeChartAction(getPensionFake(values)));
+    dispatch(uiUpdateHomeChartAction(dataToChart));
     reset();
   };
 
@@ -46,7 +51,7 @@ export const HomeForm = () => {
       </div>
       <div className="homeform__item">
         <label htmlFor="monthlySalary" className="homeform__label">
-          Monthly contribution:
+          Monthly salary:
         </label>
         <input
           type="number"
