@@ -351,14 +351,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         emit RegisterQuoteRetaired(_pension.owner, id, monthlyQuoteValue, quantityQuotes, 0, totalPensionMoney);
     }
 
-    // -- MVP
-    // -- Testing
-    // -- Docs
-    // function transferPension(address _to, uint256 _pensionId) public onlyOwner(_pensionId) {
-    //     transferFrom(msg.sender, _to, _pensionId);
-    //     ownerPensionsBalance[payable(msg.sender)][_pensionId].owner = payable(_to);
-    // }
-
     // -- Testing --
     /** @dev Calculate quantity quotes.
      * @param _biologySex Gamete generate.
@@ -388,7 +380,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         }
     }
 
-    
     // ************************ //
     // *   Getters & Setters  * //
     // ************************ //
