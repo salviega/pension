@@ -22,6 +22,7 @@ module.exports = {
   defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
+      allowUnlimitedContractSize: true,
       forking: {
         url: process.env.RINKEBY_RPC_URL,
         blockNumber: 11321611
