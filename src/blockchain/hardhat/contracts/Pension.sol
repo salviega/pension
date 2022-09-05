@@ -115,7 +115,42 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
     /* Events */
 
-    event depositContributor(address contributorAddress, uint256 contributorAmount, uint256 timeDeposit);
+    /** @dev RegisterPension Emited when it is created a pension.
+     * @param _owner contributor address.
+     * @param _biologySex Gamete production of the contributor.
+     * @param _age Contributor age.
+     * @param _bornAge birth of date.
+     * @param _retirentmentDate Retairment date of the contributor.
+     * @param _pensionCreatedTime Mintend pension date.
+     * @param _pensionId Pension ID.
+    */
+    event RegisterPension(address indexed _owner, string _biologySex, uint256 _age, uint256 _bornAge, uint256 _retirentmentDate, uint256 _pensionCreatedTime, uint256 indexed _pensionId); 
+    
+    /** @dev RegisterQuote Emited when a contribuitor does to deposit.
+     * @param _owner contributor address.
+     * @param _id Id that identify the transaction.
+     * @param _dataPension All information about Pension.
+     * @param _contributionDate Contribution date.
+     * @param _savingAmount Salving Regime's deposit.
+     * @param _solidaryAmount Solidary Regime's deposit.
+     * @param _totalAmount Total deposit. 
+    */
+    event RegisterQuote(address indexed _owner, bytes32 indexed _id, DataPension _dataPension, uint256 _contributionDate, uint256 _savingAmount, uint256 _solidaryAmount, uint256 _totalAmount);
+
+    /** @dev RegisterRetired Emited when a contribuitor does to deposit.
+     * @param _owner Retaired address.
+     * @param _id Id that identify the transaction.
+     * @param _monthlyQuote Quote value monthly.
+     * @param _quantityQuotes Amount quotes that must be paid.
+     * @param _totalPaidQuotes Total the quotes paid.
+     * @param _totalPensionValue Total value of the pension. 
+    */
+    event RegisterQuoteRetaired(address indexed _owner, bytes32 indexed _id, uint256 _monthlyQuote, uint256 _quantityQuotes, uint256 _totalPaidQuotes, uint256 _totalPensionValue);
+
+    /** @dev RegisterGeneralRecord Emited the general balance of the contract.
+     * @param _generalBalance Array with all information about contract.
+    */
+    event RegisterGeneralBalance(GeneralRecord _generalBalance);
 
     /** @dev Constructor
      *  
@@ -153,11 +188,13 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
         
         DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId, 0, 0);       
-        firstDeposit(newPension, _firstQuote);
         
         ownerPensionsBalance[msg.sender][pensionId] = newPension;
+        firstDeposit(newPension, _firstQuote);
         cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
         addressesThatAlreadyMinted[msg.sender] = true;
+
+        emit RegisterPension(msg.sender, _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId);
     }
 
     /** @dev Verify if the contributor already minted your pension.
@@ -179,15 +216,13 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function firstDeposit(DataPension memory _pension, uint256 _firstQuote) private {
         uint256 contributionDate = block.timestamp;
-        uint256 savingsAmount = _firstQuote * 23 / 100;
-        uint256 solidaryAmount = _firstQuote * 73 / 100;
+        uint256 savingsAmount = _firstQuote * 24 / 100;
+        uint256 solidaryAmount = _firstQuote - savingsAmount; // 76 % 
         _pension.totalSavings += savingsAmount;
         _pension.totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pension.pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pension.pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pension.pensionId], _firstQuote, contributionDate, savingsAmount, solidaryAmount);
-
-        emit depositContributor(_pension.owner, _firstQuote, _pension.pensionCreatedTime);
     }
 
     // -- Testing --
@@ -197,15 +232,14 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function depositAmount(uint256 _pensionId, uint256 _amount) payable public onlyOwner(msg.sender, _pensionId) validAmount(msg.value) {
         uint256 contributionDate = block.timestamp;
-        uint256 savingsAmount = _amount * 23 / 100;
-        uint256 solidaryAmount = _amount * 73 / 100;
+        uint256 savingsAmount = _amount * 24 / 100;
+        uint256 solidaryAmount = _amount - savingsAmount;
+
         ownerPensionsBalance[msg.sender][_pensionId].totalSavings += savingsAmount;
         ownerPensionsBalance[msg.sender][_pensionId].totalSolidary += solidaryAmount;
         solidaryBalance[msg.sender][_pensionId] += solidaryAmount;
         savingsBalance[msg.sender][_pensionId] += savingsAmount;
         registerMonthlyQuote(ownerPensionsBalance[msg.sender][_pensionId], _amount, contributionDate, savingsAmount, solidaryAmount);
-
-        emit depositContributor(ownerPensionsBalance[msg.sender][_pensionId].owner, _amount, contributionDate);
     }
 
     // -- Testing --
@@ -220,13 +254,16 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         bytes32 id = keccak256(abi.encodePacked(_contributionDate));
         monthlyGeneralBalance[cutoffDate].totalAmount += _totalAmount;
         monthlyGeneralBalance[cutoffDate].monthlyQuotes.push(MonthlyQuote(payable(_pension.owner), id, _pension, _contributionDate, _savingsAmount, _solidaryAmount,  _totalAmount));
+        
+        emit RegisterQuote(_pension.owner, id, _pension, _contributionDate, _savingsAmount, _solidaryAmount,  _totalAmount);
+
     }
 
     // -- Testing --
     /** @dev Update cutoff date.
      * 
     */ 
-    function updateCutoffDate() private {
+    function updateCutoffDate() public { //MVP public for testing purposes
             generalRecord.monthlyRecords.push(monthlyGeneralBalance[cutoffDate]);
             generalRecord.totalAmount += monthlyGeneralBalance[cutoffDate].totalAmount;
             generalRecord.totalToPay += retairedBalance[cutoffDate].totalToPay;
@@ -247,6 +284,9 @@ contract Pension is ERC721, KeeperCompatibleInterface {
             generateNewRetirentments(cutoffDate);
             MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
             monthlyGeneralBalance[cutoffDate] = monthlyRecord;
+
+            emit RegisterGeneralBalance(generalRecord);
+ 
     }
 
     // -- Testing --
@@ -254,17 +294,18 @@ contract Pension is ERC721, KeeperCompatibleInterface {
      * 
     */ 
     function sendMoneyToRetaired() private {
+        bytes32 id = keccak256(abi.encodePacked(block.timestamp));
         RetairedRecord[] memory retairedRecordList =  generalRecord.retairedRecords;
         for (uint256 x = 0; x > retairedRecordList.length; x ++) {
             RetairedQuote[] memory retairedQuotelist = retairedRecordList[x].retairedQuotes;
             for (uint256 y = 0; y > retairedQuotelist.length; y ++) {
                 RetairedQuote memory retairedQuote = retairedQuotelist[y];
-                retairedQuote.owner.transfer(retairedQuote.monthlyQuote);
                 generalRecord.totalToPay -= retairedQuote.monthlyQuote;
                 generalRecord.totalAmount -= retairedQuote.monthlyQuote;
                 retairedQuote.owner.transfer(retairedQuote.monthlyQuote);
                 //(bool output, bytes memory response) = retairedQuote.owner.call{value:retairedQuote.monthlyQuote, gas: 200000}(""); -- MVP
                 retairedQuote.totalPaidQuotes += retairedQuote.monthlyQuote;
+                
                 if (retairedQuote.totalPaidQuotes >= retairedQuote.totalPensionValue) {
                     delete retairedQuotelist[y];
                     // _burn(retairedQuote.idToken); -- MVP
@@ -272,6 +313,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
                         delete retairedRecordList[x];
                     }
                 }
+
+                emit RegisterQuoteRetaired(retairedQuote.owner, id, retairedQuote.monthlyQuote, retairedQuote.quantityQuotes, retairedQuote.totalPaidQuotes, retairedQuote.totalPensionValue);
             }
         }
     }
@@ -294,6 +337,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
      * @param _retirentmentDate Retirentment date.
     */
     function registerRetirentment(DataPension memory _pension, uint256 _retirentmentDate) private {
+        bytes32 id = keccak256(abi.encodePacked(block.timestamp));
         uint256 totalSavingsMoney = savingsBalance[_pension.owner][_pension.pensionId];
         uint256 totalSolidaryMoney = solidaryBalance[_pension.owner][_pension.pensionId];
         uint256 totalPensionMoney = totalSavingsMoney + totalSolidaryMoney;
@@ -303,6 +347,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         retairedBalance[_retirentmentDate].totalAmount += newRetaired.totalPensionValue;
         retairedBalance[_retirentmentDate].totalToPay += newRetaired.monthlyQuote;
         retairedBalance[_retirentmentDate].retairedQuotes.push(newRetaired);
+
+        emit RegisterQuoteRetaired(_pension.owner, id, monthlyQuoteValue, quantityQuotes, 0, totalPensionMoney);
     }
 
     // -- MVP

@@ -5,8 +5,10 @@ import { Navigate } from 'react-router-dom';
 
 import { PensionOfUser } from './PensionOfUser/index.js'
 import { PensionStadistic } from './PensionStadistic/PensionStadistic.js'
+import { getSubGraphData } from '../../middleware/getSubGraphData';
 
 function PensionMyPensions() {
+  const { getAllElementsByItem: getAllQuotesByAddress } = getSubGraphData();
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
 
   const mockPension = [
@@ -24,8 +26,15 @@ function PensionMyPensions() {
     }
   ]
 
+  React.useEffect(() => {
+    const data = async (address) => {
+      console.log( await getAllQuotesByAddress(address))
+    }
+    //data(address);
+  }, [])
+  
   if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
-
+  
   return (
     <div className="my-pensions-container">
       <div className='my-pensions-container__pensions-list'>
