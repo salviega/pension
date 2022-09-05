@@ -23,7 +23,7 @@ const proofOfHumanityAddress = jsonProofOfHumanityAddress.proofofhumanity;
 function PensionWallet() {
   // const { wallet: walletStorage } = useSelector(({ auth }) => auth);
   const { wallet, isRegisted, isVerified } = useSelector(({ auth }) => auth);
-  console.log(wallet);
+  // console.log(wallet);
   // const [addressWallet, setAdressWallet] = React.useState(walletStorage);
 
   const [loading, setLoading] = React.useState(false);
