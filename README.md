@@ -27,18 +27,18 @@ npm install
 ```
 npm start
 ```
-## Description
+## Description 
 Pension is a mixed blockchain pension system that seeks to be the alternative to traditional schemes, taking advantage of the governance and traceability offered by this technology.
-### Bussiness Model
+### Bussiness Model 💡
 ![Softwarebusiness model](https://user-images.githubusercontent.com/90350943/188745699-dd3086a1-80e3-4092-9f64-cdec70bb1e76.png)
 
-### MVP Business Model
+### MVP Business Model 
 #### Proyect scope:
 The scope MVP was black in color.
 
 ![MVP business model](https://user-images.githubusercontent.com/90350943/188745171-88f325ce-9801-4a24-8a75-679a653c8210.png)
 
-### Software architectural style
+### Software architectural style 📚
 #### Technologies:
 
 ![Sofware architectural](https://user-images.githubusercontent.com/90350943/188748888-ae54c4b1-1d4b-4b62-9642-b1f40595bf5f.png)
@@ -47,7 +47,7 @@ The scope MVP was black in color.
 #### Technolgoies used in MVP:
 
 ![MVP architectural](https://user-images.githubusercontent.com/90350943/188739152-0b9c677a-df5a-4d89-98c8-e5cd28c42f3e.png)
-### Authors
+### Authors 🏗
 
 [GerardoDev25](https://github.com/GerardoDev25)
 
