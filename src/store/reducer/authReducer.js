@@ -1,20 +1,22 @@
 import { types } from '../types';
 
 const initialState = {
-  isRegisted: localStorage.getItem('wallet') ? true : false,
-  isVerified: localStorage.getItem('wallet') ? true : false,
+  isRegisted: localStorage.getItem('isRegisted') ? true : false,
+  isVerified: localStorage.getItem('isVerified') ? true : false,
   wallet: localStorage.getItem('wallet') || 'Connect your Wallet',
 };
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.authRegisted:
+      localStorage.setItem('isRegisted', 'true');
       return { ...state, isRegisted: true };
 
     case types.authUnregisted:
       return { ...state, isRegisted: false };
 
     case types.authVerified:
+      localStorage.setItem('isVerified', 'true');
       return { ...state, isVerified: true };
 
     case types.authUnverified:
@@ -26,7 +28,8 @@ export const authReducer = (state = initialState, action) => {
 
     case types.authLoguot:
       localStorage.clear();
-      return { ...state, wallet: 'Connect your Wallet' };
+      // return { ...state, wallet: 'Connect your Wallet' };
+      return { ...initialState };
 
     default:
       return state;

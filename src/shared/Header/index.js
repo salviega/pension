@@ -41,20 +41,21 @@ function Header(props) {
                     About
                   </NavLink>
                 </li>
-                {isVerified && isRegisted && (
-                  <li className="main-nav__item">
-                    <NavLink to="/mypensions" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>
-                      My pensions
-                    </NavLink>
-                  </li>
-                )}
-                {isVerified && !isRegisted && (
-                  <li className="main-nav__item">
-                    <NavLink to="/register" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>
-                      Register
-                    </NavLink>
-                  </li>
-                )}
+                {isVerified &&
+                  (isRegisted ? (
+                    <li className="main-nav__item">
+                      <NavLink to="/mypensions" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>
+                        My pensions
+                      </NavLink>
+                    </li>
+                  ) : (
+                    <li className="main-nav__item">
+                      <NavLink to="/register" className={({ isActive }) => (isActive ? 'main-nav__link--active' : '')}>
+                        Register
+                      </NavLink>
+                    </li>
+                  ))}
+
                 <li className="main-nav__item">{React.cloneElement(props.children, {})}</li>
               </div>
             </div>
