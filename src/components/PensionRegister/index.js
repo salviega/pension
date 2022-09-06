@@ -1,19 +1,32 @@
 import './PensionRegister.scss';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { ethers } from 'ethers';
 import { useSelector } from 'react-redux';
+
+import jsonPension from "../../blockchain/environment/contract-address.json";
+import pensionContractAbi from "../../blockchain/hardhat/artifacts/src/blockchain/hardhat/contracts/Pension.sol/Pension.json";
+const pensionAddress = jsonPension.pensioncontract;
 
 function PensionRegister() {
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target.value);
+    
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+      const web3Signer = web3Provider.getSigner();
+      const pensionContract = new ethers.Contract(
+        pensionAddress,
+        pensionContractAbi.abi,
+        web3Signer
+      );
+      console.log(pensionContract)
   };
 
-  if (isVerified || !isRegisted) return <Navigate replace to="/" />;
+  //if (isVerified || !isRegisted) return <Navigate replace to="/" />;
   return (
-    <>
+    <React.Fragment>
       <h2>Get your pension</h2>
       <div className="container">
         <form onSubmit={handleSubmit}>
@@ -59,7 +72,7 @@ function PensionRegister() {
           </div>
         </form>
       </div>
-    </>
+    </ React.Fragment>
   );
 }
 

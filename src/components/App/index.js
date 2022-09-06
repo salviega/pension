@@ -21,7 +21,7 @@ import { authLoguotAction } from '../../store/actions/authAction';
 function App() {
   const dispatch = useDispatch();
 
-  const { loading, error } = React.useContext(PensionContext);
+  const { loading, setLoading, error } = React.useContext(PensionContext);
   const { modal } = useSelector((e) => e.ui);
 
   React.useEffect(() => {
@@ -61,7 +61,7 @@ function App() {
             <Route path="/" element={<PensionHome />} />
             <Route path="/about" element={<PensionAbout />} />
             <Route path="/mypensions" element={<PensionMyPensions />} />
-            <Route path="/register" element={<PensionRegister />} />
+            <Route path="/register" element={<PensionRegister loading={loading} setLoading={setLoading} />} />
           </Routes>
         </main>
         <Footer />

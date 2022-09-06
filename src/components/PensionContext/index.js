@@ -28,6 +28,7 @@ function PensionProvider (props) {
       value={{
         items,
         loading,
+        setLoading,
         error,
       }}
     >

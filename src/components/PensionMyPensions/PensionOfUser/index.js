@@ -16,9 +16,9 @@ function PensionOfUser({ age, biologySex, bornAge, id, owner, pensionCreatedTime
     event.preventDefault();
     setLoading(true);
     try {
+      const amount = event.target.value.value;
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
       const web3Signer = web3Provider.getSigner();
-      const amount = event.target.value.value;
       const pensionContract = new ethers.Contract(
         pensionAddress,
         pensionContractAbi.abi,
