@@ -36,10 +36,10 @@ function PensionWallet() {
     if (wallet === 'Connect your Wallet') {
       setLoading(true);
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+      await web3Provider.send("eth_requestAccounts", [])
       const accounts = await web3Provider.send('eth_requestAccounts', []);
 
       const walletAcount = accounts[0];
-      console.log(walletAcount)
       dispatch(authloginAction(accounts[0]));
 
       const verification = true //await verifyInProofOfHumanity(walletAcount);

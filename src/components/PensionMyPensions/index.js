@@ -98,7 +98,7 @@ function PensionMyPensions() {
     });
   }, []);
 
-  if (!isVerified && !isRegisted) return <Navigate replace to="/" />;
+  if (isVerified && isRegisted) return <Navigate replace to="/" />;
 
   return (
     <React.Fragment>

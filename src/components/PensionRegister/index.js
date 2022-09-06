@@ -29,10 +29,9 @@ function PensionRegister({ loading, setLoading }) {
     check: true,
   });
   const { birthDate } = values;
-
-  const handleSubmit = async (e) => {
+  
+  const handleSubmit = async (e, ) => {
     e.preventDefault();
-    setValidate({ ...validate, ...validateRegisterForm(values) });
 
     const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
     const web3Signer = web3Provider.getSigner();
@@ -183,7 +182,9 @@ function PensionRegister({ loading, setLoading }) {
                 required check
               </p>
             </div>
-            <button type="submit" className="button-summit">
+            <button type="submit" className="button-summit" onClick={() => {
+              setValidate({ ...validate, ...validateRegisterForm(values) });
+            }}>
               Mint
             </button>
           </div>
