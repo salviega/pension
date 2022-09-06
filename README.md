@@ -39,14 +39,14 @@ The scope MVP was black in color.
 ![MVP business model](https://user-images.githubusercontent.com/90350943/188745171-88f325ce-9801-4a24-8a75-679a653c8210.png)
 
 ### Software architectural style
-#### Technologies used:
-![Software architectural](https://user-images.githubusercontent.com/90350943/188747280-7f252e57-506c-4368-80e1-a721be4d940d.png")
+#### Technologies:
+
+![Sofware architectural](https://user-images.githubusercontent.com/90350943/188748888-ae54c4b1-1d4b-4b62-9642-b1f40595bf5f.png)
 
 ### MVP architectural style
-#### Technolgoies used in this repositorie:
+#### Technolgoies used in MVP:
 
 ![MVP architectural](https://user-images.githubusercontent.com/90350943/188739152-0b9c677a-df5a-4d89-98c8-e5cd28c42f3e.png)
-
 ### Authors
 
 [GerardoDev25](https://github.com/GerardoDev25)
