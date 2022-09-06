@@ -18,8 +18,8 @@ function PensionAbout() {
       <div className="About__header">
         <h1 className="About__title">About Us</h1>
         <p className="About__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit corrupti recusandae perspiciatis dolor voluptas
-          veniam, odit ut impedit, ullam pariatur provident doloremque quibusdam laboriosam minus illo iusto in ducimus atque.
+          We are a group of developers focused on solving problems through the development of software programs that can meet the
+          needs in some aspect of society that has not yet been resolved and is persistent.
         </p>
       </div>
       <article className="About__body">

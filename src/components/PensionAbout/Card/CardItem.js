@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { openModalAction, loadDataModalAction } from '../../../store/actions/uiAction';
 import './CardItem.scss';
 
-export const CardItem = ({ description, img, name, role }) => {
+export const CardItem = ({ description, img, name, role, github }) => {
   const dispatch = useDispatch();
 
   const cupString = (str = '', lenght) => (str.length > lenght ? str.slice(0, lenght) + '...' : str);
@@ -18,7 +18,13 @@ export const CardItem = ({ description, img, name, role }) => {
           </div>
           <div className="Content__body">
             <div className="Content__img" style={{ backgroundImage: `url(${img})` }}></div>
-            <blockquote className="Content__description">" {description} "</blockquote>
+
+            <blockquote className="Content__description">
+              " {description} "
+              <a href={github} target="__blank" className="Content__link">
+                {github.slice(8, -1)}
+              </a>
+            </blockquote>
           </div>
         </div>
       )

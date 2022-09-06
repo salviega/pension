@@ -85,6 +85,17 @@
     font-style: italic;
     margin-top: 0;
   }
+  &__link {
+    display: block;
+    margin-top: 1.7rem;
+    color: #bd8200;
+    &:visited {
+      color: #bd8200;
+    }
+    &::selection {
+      color: black;
+    }
+  }
 }
 
 hr {
@@ -101,8 +112,8 @@ hr {
       height: 30rem;
     }
 
-    &__img{
-      background-position: top;
+    &__img {
+      background-position: center;
       margin-left: 3rem;
       margin-right: 3rem;
       min-height: 120px;

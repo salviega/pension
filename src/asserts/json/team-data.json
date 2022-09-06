@@ -1,32 +1,37 @@
 [
-    {
-        "name": "Nicolas Lizarazo",
-        "description": "love tech and lifelong learning, currently learning blockchain development and studying Mechatronics Engineering , also worked with frontend, backend, a bit of devops. knowledge in Machine learning , Blockchain and web3 and trading, microcontrollers, design and 3D software.",
-        "img": "https://avatars.githubusercontent.com/u/39562903?v=4",
-        "role": "Frontend developer, researching in machine learning, computer vision and blockchain technologies."
-    },
-    {
-        "name": "Gerardo Miranda",
-        "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos culpa eaque soluta dicta error et possimus neque velit eius eum illum hic similique molestias perferendis, temporibus reiciendis. Dolor, nemo quidem!",
-        "img": "https://avatars.githubusercontent.com/u/83968980?v=4",
-        "role": "Frontend developer"
-    },
-    {
-        "name": "Jairo Lopez Londoño",
-        "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos culpa eaque soluta dicta error et possimus neque velit eius eum illum hic similique molestias perferendis, temporibus reiciendis. Dolor, nemo quidem!",
-        "img": "https://avatars.githubusercontent.com/u/31752670?v=4",
-        "role": "Product Designer, Frontend Developer"
-    },
-    {
-        "name": "Jaime Jiménez",
-        "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos culpa eaque soluta dicta error et possimus neque velit eius eum illum hic similique molestias perferendis, temporibus reiciendis. Dolor, nemo quidem!",
-        "img": "https://avatars.githubusercontent.com/u/310281?v=4",
-        "role": "Web3 Developer"
-    },
-    {
-        "name": "Santiago A. Viana V.",
-        "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos culpa eaque soluta dicta error et possimus neque velit eius eum illum hic similique molestias perferendis, temporibus reiciendis. Dolor, nemo quidem!",
-        "img": "https://avatars.githubusercontent.com/u/90350943?v=4",
-        "role": "Ecólogo | Programador"
-    }
+  {
+    "name": "Nicolas Lizarazo",
+    "description": "love tech and lifelong learning, currently learning blockchain development and studying Mechatronics Engineering , also worked with frontend, backend, a bit of devops. knowledge in Machine learning , Blockchain and web3 and trading, microcontrollers, design and 3D software.",
+    "img": "https://avatars.githubusercontent.com/u/39562903?v=4",
+    "role": "Frontend developer, researching in machine learning, computer vision and blockchain technologies.",
+    "github": "https://github.com/Flizyx"
+  },
+  {
+    "name": "Gerardo Miranda",
+    "description": "I am a person focused on web development with solid knowledge of the basic technologies of development such as HTML CSS and JavaScript, self-taught who always tries to be in constant learning by acquiring new skills. New ways of solving problems that can arise in the day-to-day of the industry",
+    "img": "https://avatars.githubusercontent.com/u/83968980?v=4",
+    "role": "Frontend developer",
+    "github": "https://github.com/GerardoDev25/"
+  },
+  {
+    "name": "Jairo Lopez Londoño",
+    "description": "Web developer with 2 years of experience, in which I have worked integrating RESTful API services such as: the Spanish cadastre web service, Alegra (invoicing and accounting software) and INVIMA (national drug and food surveillance institute) ; dynamic website building",
+    "img": "https://avatars.githubusercontent.com/u/31752670?v=4",
+    "role": "Product Designer, Frontend Developer",
+    "github": "https://github.com/jairolopezlon/"
+  },
+  {
+    "name": "Jaime Jiménez",
+    "description": "I am currently working on quality assurance for insurance service platforms. Experience in the end-to-end software development lifecycle, from documentation, requirements gathering, development, testing, deployment, and support/maintenance.",
+    "img": "https://avatars.githubusercontent.com/u/310281?v=4",
+    "role": "Web3 Developer",
+    "github": "https://github.com/jejimenez"
+  },
+  {
+    "name": "Santiago A. Viana V.",
+    "description": "Ecologist and full stack developer with experience in the study of vegetation in functional diversity and in the socioeconomic monitoring of communities involved in environmental projects. With expertise in managing software and programming languages for statistical data analysis and web development",
+    "img": "https://avatars.githubusercontent.com/u/90350943?v=4",
+    "role": "Ecólogo | Programador",
+    "github": "https://github.com/salviega"
+  }
 ]
