@@ -1,7 +1,10 @@
 .homechart {
   // outline: 2px dotted black;
-  height: 56vh;
+  // height: 100;
+  height: auto;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 
   display: grid;
   grid-template-rows: 1fr 2rem;

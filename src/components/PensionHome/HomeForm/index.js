@@ -3,7 +3,6 @@ import { useForm } from '../../../hooks/useForm';
 import { useDispatch } from 'react-redux';
 
 import { desactiveSidebarAction, uiUpdateHomeChartAction } from '../../../store/actions/uiAction';
-import { getPensionFake } from '../../../utils/getPensionFake';
 import { calculatePensionProjection } from '../calculatePensionProjection';
 
 export const HomeForm = () => {

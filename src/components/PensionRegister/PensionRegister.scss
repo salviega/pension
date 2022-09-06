@@ -4,6 +4,11 @@ h2 {
 
 h4 {
   color: #f0a500;
+
+  & span {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
 }
 
 .button-summit {
@@ -19,12 +24,12 @@ h4 {
 }
 
 .space {
-  margin-top: 23.940px;
+  margin-top: 23.94px;
 }
 
 input,
-input[type="radio"] + label,
-input[type="checkbox"] + label:before,
+input[type='radio'] + label,
+input[type='checkbox'] + label:before,
 select option,
 select {
   width: 100%;
@@ -49,10 +54,10 @@ input:focus + .input-icon i {
 input:focus + .input-icon:after {
   border-right-color: #f0a500;
 }
-input[type="radio"] {
+input[type='radio'] {
   display: none;
 }
-input[type="radio"] + label,
+input[type='radio'] + label,
 select {
   border-radius: 0;
   display: inline-block;
@@ -60,18 +65,18 @@ select {
   text-align: center;
   width: 50%;
 }
-input[type="radio"] + label:first-of-type {
+input[type='radio'] + label:first-of-type {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-input[type="radio"] + label:last-of-type {
+input[type='radio'] + label:last-of-type {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-input[type="radio"] + label i {
+input[type='radio'] + label i {
   padding-right: 0.4em;
 }
-input[type="radio"]:checked + label,
+input[type='radio']:checked + label,
 input:checked + label:before,
 select:focus,
 select:active {
@@ -79,15 +84,15 @@ select:active {
   color: #fff;
   border-color: #bd8200;
 }
-input[type="checkbox"] {
+input[type='checkbox'] {
   display: none;
 }
-input[type="checkbox"] + label {
+input[type='checkbox'] + label {
   position: relative;
   display: block;
   padding-left: 1.6em;
 }
-input[type="checkbox"] + label:before {
+input[type='checkbox'] + label:before {
   position: absolute;
   top: 0.2em;
   left: 0;
@@ -95,7 +100,7 @@ input[type="checkbox"] + label:before {
   width: 1em;
   height: 1em;
   padding: 0;
-  content: "";
+  content: '';
 }
 
 input:checked + label:after {
@@ -118,7 +123,7 @@ select:active {
   outline: 0;
 }
 select option {
-  background-color: #f0a500;  
+  background-color: #f0a500;
   color: #fff;
 }
 
@@ -126,8 +131,8 @@ select option {
   max-width: 38em;
   padding: 1em 3em 2em 3em;
   margin: 0em auto;
-  margin-bottom: 22.410px;
-  margin-top: 22.410px;
+  margin-bottom: 22.41px;
+  margin-top: 22.41px;
   background-color: #fff;
   border-radius: 4.2px;
   box-shadow: 0px 3px 10px -2px rgba(0, 0, 0, 0.2);
@@ -137,7 +142,7 @@ select option {
 }
 .row:before,
 .row:after {
-  content: "";
+  content: '';
   display: table;
 }
 .row:after {
@@ -154,7 +159,7 @@ select option {
 .col-third {
   padding-right: 10px;
   float: left;
-  width: 33.33333333%;
+  width: 100%;
 }
 .col-third:last-of-type {
   padding-right: 0;
@@ -163,5 +168,24 @@ select option {
   .col-half {
     width: 100%;
     padding-right: 0;
+  }
+}
+.error-msg {
+  color: red;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  width: 90%;
+  display: block;
+  margin-right: auto;
+  border-radius: 0.4rem;
+  opacity: 1;
+  visibility: visible;
+  &::before {
+    content: '* ';
+    color: inherit;
+  }
+  &--hidde {
+    opacity: 0;
+    visibility: hidden;
   }
 }
