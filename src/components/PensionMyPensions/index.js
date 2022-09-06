@@ -33,19 +33,26 @@ function PensionMyPensions() {
       let arr = [];
       if (typeof info !== Array) {
         let newInfo = { ...info };
-
         let milliseconds = info.pensionCreatedTime * 1000;
         let dateObject = new Date(milliseconds);
         let humanDateFormat = dateObject.toLocaleString([], {
           hour12: false,
         });
         newInfo.pensionCreatedTime = humanDateFormat;
+        
         milliseconds = info.retirentmentData * 1000;
         dateObject = new Date(milliseconds);
         humanDateFormat = dateObject.toLocaleString([], {
           hour12: false,
         });
         newInfo.retirentmentData = humanDateFormat;
+
+        milliseconds = info.bornAge * 1000;
+        dateObject = new Date(milliseconds);
+        humanDateFormat = dateObject.toLocaleString([], {
+          hour12: false,
+        });
+        newInfo.bornAge = humanDateFormat.toLocaleString().split(",")[0]
         arr.push(newInfo);
         setPensions(arr);
         getQuotes(wallet).then((response) => {
