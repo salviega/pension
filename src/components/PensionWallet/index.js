@@ -9,6 +9,7 @@ import {
   authVerifiedAction,
   authLoguotAction,
   authloginAction,
+  authRegistedAction,
 } from '../../store/actions/authAction';
 
 import proofOfHumanityAbi from '../../blockchain/environment/proof-of-humanity/proof-of-humanity-abi-.json';
@@ -57,18 +58,24 @@ function PensionWallet() {
       }
 
       const mintVerification = await verifyMintInPension(walletAcount);
+      console.log(mintVerification)
+
 
       // if (false) {
-      if (!mintVerification) {
+      if (!mintVerification) { //false
         // dispatch(authUnregistedAction());
         // dispatch(authUnverifiedAction());
-        dispatch(authLoguotAction());
+        //dispatch(authLoguotAction());
+        dispatch(authVerifiedAction())
+        dispatch(authUnregistedAction())
         setLoading(false);
         return;
-      }
+      } 
       setLoading(false);
       dispatch(authVerifiedAction());
+      dispatch(authRegistedAction())
     } else {
+      console.log(":D")
       dispatch(authLoguotAction());
       dispatch(authUnregistedAction());
       dispatch(authUnverifiedAction());
@@ -78,6 +85,8 @@ function PensionWallet() {
         dispatch(authLoguotAction());
       } else {
         dispatch(authLoguotAction());
+        window.location.reload()
+        
       }
     }
   };

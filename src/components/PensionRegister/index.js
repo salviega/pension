@@ -37,8 +37,7 @@ function PensionRegister({ loading, setLoading }) {
       console.log('form invalid');
       return;
     }
-    console.log('form valid');
-    dispatch(authRegistedAction());
+    //dispatch(authRegistedAction());
 
     const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
     const web3Signer = web3Provider.getSigner();
@@ -66,6 +65,7 @@ function PensionRegister({ loading, setLoading }) {
           alert('You will return to the home page');
           dispatch(authRegistedAction());
           dispatch(authVerifiedAction());
+          setLoading(false);
           <Navigate replace to="/" />;
         })
         .catch((_error) => {

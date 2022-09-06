@@ -36,13 +36,13 @@ function App() {
         currentNetwork().then((response) => {
           if (response !== 4) {
             dispatch(authLoguotAction());
-            window.location.reload();
+            //window.location.reload();
           }
         });
       });
       window.ethereum.on('accountsChanged', () => {
         dispatch(authLoguotAction());
-        window.location.reload();
+        //window.location.reload();
       });
     }
   }, [dispatch]);
