@@ -185,7 +185,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
         uint256 quoteTime = retirentmentAge - age; 
         uint256 retirentmentDate = mintDate + quoteTime; 
-        uint256 retirentmentCutoffDate = ((retirentmentDate - cutoffDate) / 30 days) + 30 days;
+        uint256 retirentmentCutoffDate = (((retirentmentDate - cutoffDate) / interval) * interval) + interval;
         
         DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId, 0, 0);       
         
@@ -298,9 +298,9 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     function sendMoneyToRetaired() private {
         bytes32 id = keccak256(abi.encodePacked(block.timestamp));
         RetairedRecord[] memory retairedRecordList =  generalRecord.retairedRecords;
-        for (uint256 x = 0; x > retairedRecordList.length; x ++) {
+        for (uint256 x = 0; x < retairedRecordList.length; x ++) {
             RetairedQuote[] memory retairedQuotelist = retairedRecordList[x].retairedQuotes;
-            for (uint256 y = 0; y > retairedQuotelist.length; y ++) {
+            for (uint256 y = 0; y < retairedQuotelist.length; y ++) {
                 RetairedQuote memory retairedQuote = retairedQuotelist[y];
                 generalRecord.totalToPay -= retairedQuote.monthlyQuote;
                 generalRecord.totalAmount -= retairedQuote.monthlyQuote;
@@ -343,8 +343,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         uint256 totalSavingsMoney = savingsBalance[_pension.owner][_pension.pensionId];
         uint256 totalSolidaryMoney = solidaryBalance[_pension.owner][_pension.pensionId];
         uint256 totalPensionMoney = totalSavingsMoney + totalSolidaryMoney;
-        uint256 monthlyQuoteValue = ((totalPensionMoney/21)/12); 
         uint256 quantityQuotes = calculateQuantityQuotes(_pension.biologySex);
+        uint256 monthlyQuoteValue = (totalPensionMoney/quantityQuotes); 
         RetairedQuote memory newRetaired = RetairedQuote(_pension.owner, monthlyQuoteValue, quantityQuotes, 0, totalPensionMoney);
         retairedBalance[_retirentmentDate].totalAmount += newRetaired.totalPensionValue;
         retairedBalance[_retirentmentDate].totalToPay += newRetaired.monthlyQuote;
@@ -359,10 +359,10 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function calculateQuantityQuotes(string memory _biologySex) private pure returns(uint256){
         if(compareStrings(_biologySex, "male")) {
-            return (maleExpectancyLife - retirentmentAge) / 12;
+            return (maleExpectancyLife - retirentmentAge) / 365 days / 12;
         } 
         if(compareStrings(_biologySex, "female")) {
-            return (femaleExpectancyLife - retirentmentAge) / 12;
+            return (femaleExpectancyLife - retirentmentAge) / 365 days / 12;
         }
         return 0;
     }
