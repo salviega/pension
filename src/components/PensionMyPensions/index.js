@@ -1,12 +1,12 @@
-import "./PensionMyPensions.scss";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { PensionOfUser } from "./PensionOfUser/index.js";
-import { PensionStadistic } from "./PensionStadistic/PensionStadistic.js";
-import { getSubGraphData } from "../../middleware/getSubGraphData";
-import { PensionLoading } from "../PensionLoading";
-import { ethers } from "ethers";
+import './PensionMyPensions.scss';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { PensionOfUser } from './PensionOfUser/index.js';
+import { PensionStadistic } from './PensionStadistic/PensionStadistic.js';
+import { getSubGraphData } from '../../middleware/getSubGraphData';
+import { PensionLoading } from '../PensionLoading';
+import { ethers } from 'ethers';
 
 function PensionMyPensions() {
   const { getPensionByAddress, getAllQuotesByAddress } = getSubGraphData();
@@ -17,7 +17,7 @@ function PensionMyPensions() {
   const [data, setData] = React.useState([]);
   const [labels, setLabels] = React.useState([]);
   const [pensions, setPensions] = React.useState([]);
-  const [totalAmount, setTotalAmount] = React.useState("");
+  const [totalAmount, setTotalAmount] = React.useState('');
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -39,7 +39,7 @@ function PensionMyPensions() {
           hour12: false,
         });
         newInfo.pensionCreatedTime = humanDateFormat;
-        
+
         milliseconds = info.retirentmentData * 1000;
         dateObject = new Date(milliseconds);
         humanDateFormat = dateObject.toLocaleString([], {
@@ -52,7 +52,7 @@ function PensionMyPensions() {
         humanDateFormat = dateObject.toLocaleString([], {
           hour12: false,
         });
-        newInfo.bornAge = humanDateFormat.toLocaleString().split(",")[0]
+        newInfo.bornAge = humanDateFormat.toLocaleString().split(',')[0];
         arr.push(newInfo);
         setPensions(arr);
         getQuotes(wallet).then((response) => {
@@ -72,8 +72,7 @@ function PensionMyPensions() {
 
           //1) combine the arrays:
           var list = [];
-          for (var j = 0; j < infoData.length; j++)
-            list.push({ name: infoData[j], age: infolabel[j] });
+          for (var j = 0; j < infoData.length; j++) list.push({ name: infoData[j], age: infolabel[j] });
 
           //2) sort:
           list.sort(function (a, b) {
@@ -98,7 +97,8 @@ function PensionMyPensions() {
     });
   }, []);
 
-  if (isVerified && isRegisted) return <Navigate replace to="/" />;
+  console.log({ isVerified, isRegisted });
+  if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
 
   return (
     <React.Fragment>
@@ -109,20 +109,11 @@ function PensionMyPensions() {
             <PensionLoading />
           ) : (
             pensions.map((pension, index) => (
-              <PensionOfUser
-                key={index}
-                {...pension}
-                totalAmount={totalAmount}
-                setLoading={setLoading}
-              ></PensionOfUser>
+              <PensionOfUser key={index} {...pension} totalAmount={totalAmount} setLoading={setLoading}></PensionOfUser>
             ))
           )}
         </div>
-        {loading ? (
-          <PensionLoading />
-        ) : (
-          <PensionStadistic labels={labels} data={data} />
-        )}
+        {loading ? <PensionLoading /> : <PensionStadistic labels={labels} data={data} />}
       </div>
     </React.Fragment>
   );

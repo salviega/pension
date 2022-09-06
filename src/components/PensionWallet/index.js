@@ -4,7 +4,6 @@ import { ethers } from 'ethers';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  authRegistedAction,
   authUnregistedAction,
   authUnverifiedAction,
   authVerifiedAction,
@@ -36,13 +35,13 @@ function PensionWallet() {
     if (wallet === 'Connect your Wallet') {
       setLoading(true);
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-      await web3Provider.send("eth_requestAccounts", [])
+      await web3Provider.send('eth_requestAccounts', []);
       const accounts = await web3Provider.send('eth_requestAccounts', []);
 
       const walletAcount = accounts[0];
       dispatch(authloginAction(accounts[0]));
 
-      const verification = true //await verifyInProofOfHumanity(walletAcount);
+      const verification = true; //await verifyInProofOfHumanity(walletAcount);
       if (!verification) {
         alert('Your wallet is not registed in Proof of Humanity');
         return;
@@ -51,26 +50,28 @@ function PensionWallet() {
       const web3Signer = web3Provider.getSigner();
       const chainId = await web3Signer.getChainId();
       if (chainId !== 4) {
+        dispatch(authLoguotAction());
         alert("Change your network to Rinkeby's testnet!");
         setLoading(false);
         return;
       }
 
-      const mintVerification = await verifyMintInPension(walletAcount)
-      if(!mintVerification) {
+      const mintVerification = await verifyMintInPension(walletAcount);
+
+      // if (false) {
+      if (!mintVerification) {
+        // dispatch(authUnregistedAction());
+        // dispatch(authUnverifiedAction());
+        dispatch(authLoguotAction());
         setLoading(false);
-        dispatch(authUnregistedAction());
-        dispatch(authVerifiedAction());
         return;
       }
-
       setLoading(false);
-      dispatch(authRegistedAction());
       dispatch(authVerifiedAction());
     } else {
+      dispatch(authLoguotAction());
       dispatch(authUnregistedAction());
       dispatch(authUnverifiedAction());
-      dispatch(authLoguotAction());
       setLoading(false);
 
       if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
@@ -82,11 +83,11 @@ function PensionWallet() {
   };
 
   const verifyMintInPension = async (wallet) => {
-    const provider = ethers.providers.getDefaultProvider('rinkeby')
-    const pensionContract = new ethers.Contract(pensionAddress, pensionContractAbi.abi, provider)
+    const provider = ethers.providers.getDefaultProvider('rinkeby');
+    const pensionContract = new ethers.Contract(pensionAddress, pensionContractAbi.abi, provider);
 
-    return await pensionContract.verifyIfTheContributorAlreadyMinted(wallet)
-  }
+    return await pensionContract.verifyIfTheContributorAlreadyMinted(wallet);
+  };
 
   const verifyInProofOfHumanity = async (wallet) => {
     const provider = ethers.providers.getDefaultProvider('mainnet');
