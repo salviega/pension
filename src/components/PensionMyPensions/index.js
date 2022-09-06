@@ -32,20 +32,20 @@ function PensionMyPensions() {
     getPension().then((info) => {
       let arr = [];
       if (typeof info !== Array) {
-        let newInfo = {...info}
-     
+        let newInfo = { ...info };
+
         let milliseconds = info.pensionCreatedTime * 1000;
         let dateObject = new Date(milliseconds);
         let humanDateFormat = dateObject.toLocaleString([], {
           hour12: false,
         });
-        newInfo.pensionCreatedTime = humanDateFormat
-        milliseconds = info.retirentmentData * 1000
-        dateObject = new Date(milliseconds)
+        newInfo.pensionCreatedTime = humanDateFormat;
+        milliseconds = info.retirentmentData * 1000;
+        dateObject = new Date(milliseconds);
         humanDateFormat = dateObject.toLocaleString([], {
           hour12: false,
         });
-        newInfo.retirentmentData = humanDateFormat
+        newInfo.retirentmentData = humanDateFormat;
         arr.push(newInfo);
         setPensions(arr);
         getQuotes().then((response) => {
@@ -80,7 +80,6 @@ function PensionMyPensions() {
             infolabel[k] = list[k].name;
             infoData[k] = list[k].age;
           }
-          //infoLavel.sort();
           setTotalAmount(Math.round(ethers.utils.formatEther(amount), 2));
           setData(infolabel);
           setLabels(infoData);

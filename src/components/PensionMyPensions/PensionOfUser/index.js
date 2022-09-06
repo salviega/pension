@@ -6,6 +6,12 @@ import pensionContractAbi from "../../../blockchain/hardhat/artifacts/src/blockc
 const pensionAddress = jsonPension.pensioncontract;
 
 function PensionOfUser({ age, biologySex, bornAge, id, owner, pensionCreatedTime, retirentmentData, setLoading, totalAmount}) {
+  const [isValid, setIsValid] = React.useState(true)
+  const handleChange = (event) => {
+    let required = event.target.value
+    if (required >= 25) setIsValid(false)
+    else setIsValid(true)
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -82,8 +88,9 @@ function PensionOfUser({ age, biologySex, bornAge, id, owner, pensionCreatedTime
             type="number"
             min="25"
             placeholder="Greater than or equal to $25 wei"
+            onChange={handleChange}
             />
-          <button className="pension-form__submit" type="submit">
+          <button className="pension-form__submit" type="submit" disabled={isValid}>
             Deposit
           </button>
         </form>
