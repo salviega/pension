@@ -41,7 +41,6 @@ function App() {
         });
       });
       window.ethereum.on('accountsChanged', () => {
-        alert('You changed the account, you were returned to the home page');
         dispatch(authLoguotAction());
         window.location.reload();
       });

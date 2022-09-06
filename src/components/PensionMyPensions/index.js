@@ -21,15 +21,15 @@ function PensionMyPensions() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const getPension = async () => {
-      return await getPensionByAddress(wallet);
+    const getPension = async (address) => {
+      return await getPensionByAddress(address);
     };
 
-    const getQuotes = async () => {
-      return await getAllQuotesByAddress(wallet);
+    const getQuotes = async (address) => {
+      return await getAllQuotesByAddress(address);
     };
 
-    getPension().then((info) => {
+    getPension(wallet).then((info) => {
       let arr = [];
       if (typeof info !== Array) {
         let newInfo = { ...info };
@@ -48,7 +48,7 @@ function PensionMyPensions() {
         newInfo.retirentmentData = humanDateFormat;
         arr.push(newInfo);
         setPensions(arr);
-        getQuotes().then((response) => {
+        getQuotes(wallet).then((response) => {
           const infoData = [];
           const infolabel = [];
           let amount = 0;
@@ -91,7 +91,7 @@ function PensionMyPensions() {
     });
   }, []);
 
-  if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
+  if (!isVerified && !isRegisted) return <Navigate replace to="/" />;
 
   return (
     <React.Fragment>

@@ -39,6 +39,7 @@ function PensionWallet() {
       const accounts = await web3Provider.send('eth_requestAccounts', []);
 
       const walletAcount = accounts[0];
+      console.log(walletAcount)
       dispatch(authloginAction(accounts[0]));
 
       const verification = true //await verifyInProofOfHumanity(walletAcount);
@@ -56,15 +57,15 @@ function PensionWallet() {
       }
 
       const mintVerification = await verifyMintInPension(walletAcount)
-      if(mintVerification) {
+      if(!mintVerification) {
         setLoading(false);
-        dispatch(authRegistedAction());
+        dispatch(authUnregistedAction());
         dispatch(authVerifiedAction());
         return;
       }
 
       setLoading(false);
-      dispatch(authUnregistedAction());
+      dispatch(authRegistedAction());
       dispatch(authVerifiedAction());
     } else {
       dispatch(authUnregistedAction());
@@ -73,7 +74,7 @@ function PensionWallet() {
       setLoading(false);
 
       if (window.location.href.includes('mypensions') || window.location.href.includes('register')) {
-        alert('Disconnected your wallet');
+        dispatch(authLoguotAction());
       } else {
         dispatch(authLoguotAction());
       }
@@ -96,7 +97,7 @@ function PensionWallet() {
 
   return (
     <button className="wallet" onClick={connectWallet}>
-      {loading ? 'loading...' : isRegisted && isVerified ? '...' + String(wallet).slice(38) : 'Connect your Wallet'}
+      {loading ? 'loading...' : isRegisted || isVerified ? '...' + String(wallet).slice(38) : 'Connect your Wallet'}
     </button>
   );
 }

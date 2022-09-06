@@ -2,17 +2,19 @@ import "./PensionRegister.scss";
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { ethers } from "ethers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../../hooks/useForm";
 import { useState } from "react";
-import { validateRegisterForm, verifyform } from "./validateRegisterForm";
+import { validateRegisterForm } from "./validateRegisterForm";
 
 import jsonPension from "../../blockchain/environment/contract-address.json";
 import pensionContractAbi from "../../blockchain/hardhat/artifacts/src/blockchain/hardhat/contracts/Pension.sol/Pension.json";
 import { PensionLoading } from "../PensionLoading";
+import { authRegistedAction, authVerifiedAction } from '../../store/actions/authAction';
 const pensionAddress = jsonPension.pensioncontract;
 
 function PensionRegister({ loading, setLoading }) {
+  const dispatch = useDispatch()
   const { isRegisted, isVerified } = useSelector(({ auth }) => auth);
   const [values, handleInputChange] = useForm({
     birthDate: "",
@@ -26,7 +28,7 @@ function PensionRegister({ loading, setLoading }) {
     firstDeposite: true,
     check: true,
   });
-  const { birthDate, firstDeposite } = values;
+  const { birthDate } = values;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,31 +64,37 @@ function PensionRegister({ loading, setLoading }) {
         bornAge,
         firstQuote,
         { value: firstQuote.toString() }
-      );
+        );
+        setLoading(true);
 
       web3Provider
         .waitForTransaction(response.hash)
         .then((_response) => {
-          setLoading(false);
           alert("Successful transaction");
+          alert("You will return to the home page");
+          dispatch(authRegistedAction());
+          dispatch(authVerifiedAction());
+          <Navigate replace to="/" />
         })
         .catch((_error) => {
           setLoading(false);
           alert("Failed transaction");
+          
         });
     } catch (error) {
-      console.log(error);
       setLoading(false);
       alert("Failed transaction");
     }
   };
 
-  if (isVerified || !isRegisted) return <Navigate replace to="/" />;
+  if (isVerified && !!isRegisted) return <Navigate replace to="/" />;
 
   return (
     <React.Fragment>
-      {loading && <PensionLoading />}
       <h2>Get your pension</h2>
+      {loading ? (
+            <PensionLoading />
+          ) : (
       <div className="container">
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -181,6 +189,7 @@ function PensionRegister({ loading, setLoading }) {
           </div>
         </form>
       </div>
+          )}
     </React.Fragment>
   );
 }

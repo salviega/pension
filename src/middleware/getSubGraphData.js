@@ -9,8 +9,8 @@ export function getSubGraphData() {
   })
   
   const queryPensionByAddress = `
-    query {
-      dataPensions(String: address) {
+    query DataPension($owner: String!) {
+      dataPensions(where: {owner: $owner}) {
         id
         owner
         biologySex
@@ -21,9 +21,9 @@ export function getSubGraphData() {
       }
     }
   `
-  const queryAllQuotesByAddress = `
-    query {
-      contributorQuotes(String: address) {
+  const queryAllQuotesFromAddress = `
+    query ContributorQuote($owner: String!) {
+      contributorQuotes(where: {owner: $owner}) {
         id
         owner
         contributionDate
@@ -35,13 +35,13 @@ export function getSubGraphData() {
   `
   const getPensionByAddress = async (address) => {
     let owner = address
-    const response = await client.query({ query: gql(queryPensionByAddress), variables: owner})
+    const response = await client.query({ query: gql(queryPensionByAddress), variables: {owner: address}})
     return response.data.dataPensions[0]
   }
 
   const getAllQuotesByAddress = async (address) => {
     let owner = address
-    const response = await client.query({ query: gql(queryAllQuotesByAddress), variables: owner}) 
+    const response = await client.query({ query: gql(queryAllQuotesFromAddress), variables: {owner: address}})
     return response.data.contributorQuotes
   }
 
