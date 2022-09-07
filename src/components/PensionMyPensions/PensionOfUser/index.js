@@ -59,7 +59,7 @@ function PensionOfUser({ age, biologySex, bornAge, id, owner, pensionCreatedTime
           </a>
         <div>
           <span className="pension-item__title">Total pension: </span>
-          <span className="pension-item__value">Eth {totalAmount}</span>
+          <span className="pension-item__value">{totalAmount} wei</span>
         </div>
         <div>
           <span className="pension-item__title">Age: </span>

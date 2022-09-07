@@ -67,7 +67,7 @@ function PensionMyPensions() {
             });
             infoData.push(item.totalAmount);
             infolabel.push(humanDateFormat);
-            amount += item.totalAmount;
+            amount += amount + parseInt(item.totalAmount);
           }
 
           //1) combine the arrays:
@@ -86,7 +86,8 @@ function PensionMyPensions() {
             infolabel[k] = list[k].name;
             infoData[k] = list[k].age;
           }
-          setTotalAmount(Math.round(ethers.utils.formatEther(amount), 2));
+          //setTotalAmount((ethers.utils.formatEther(amount))); Eth
+          setTotalAmount(amount); // Wei
           setData(infolabel);
           setLabels(infoData);
         });
@@ -97,7 +98,6 @@ function PensionMyPensions() {
     });
   }, []);
 
-  console.log({ isVerified, isRegisted });
   if (!isVerified || !isRegisted) return <Navigate replace to="/" />;
 
   return (
