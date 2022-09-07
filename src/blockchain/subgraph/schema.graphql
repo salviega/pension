@@ -1,0 +1,38 @@
+type DataPension @entity {
+  id: ID!
+  owner: String! 
+  biologySex: String!
+  age: BigInt!
+  bornAge: BigInt!
+  retirentmentData: BigInt!
+  pensionCreatedTime: BigInt!
+  contributorQuotes: [ContributorQuote!]! @derivedFrom(field: "pension")
+}
+
+type ContributorQuote @entity {
+  id: ID!
+  owner: String!
+  pension: DataPension!
+  contributionDate: BigInt!
+  savingAmount: BigInt!
+  solidaryAmount: BigInt!
+  totalAmount: BigInt!
+}
+
+type RetairedQuote @entity {
+  id: ID!
+  owner: String!
+  monthlyQuote: BigInt!
+  quantityQuote: BigInt!
+  totalPaidQuotes: BigInt!
+  totalPensionValue: BigInt!
+}
+
+type GeneralBalance @entity {
+  id: ID!
+  solvent: BigInt!
+  totalAmount: BigInt!
+  totalToPay: BigInt!
+  retairedRecords: [RetairedQuote!]
+  quoteRecords: [ContributorQuote!]
+}
