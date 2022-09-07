@@ -25,13 +25,16 @@
       console.log('contract address:', deployed.address);
     });
   
-    it("Should Mints a pension and assigns it to owner", async () => {
+    it("Should Mint a pension and assigns it to owner", async () => {
       const { owner, deployed, timestampBefore } = await setup();
   
       const firstQuote = 30;
       const birthYear = 1996
       const biologicalSex = "male"
       const age = 26
+
+      const initBalance = await ethers.provider.getBalance(owner.address);
+
       await deployed.safeMint(biologicalSex, age, birthYear, firstQuote, { value: ethers.utils.parseUnits(firstQuote.toString(),"wei") });
   
       const alreadyMinted = await deployed.verifyIfTheContributorAlreadyMinted(owner.address)
@@ -46,12 +49,14 @@
       const retirementDate = parseInt(quoteTime) + parseInt(ownerPensionBalance.pensionCreatedTime);
       const totalSavings = Math.floor(firstQuote * 24 / 100);
       const totalSolidary = firstQuote - totalSavings;
+      const finalBalance = await ethers.provider.getBalance(owner.address);
       // Expect the pension creation date to be equal to the block timestamp
       // Round it to handle the small difference between the block and the minted time
       expect(Math.round(ownerPensionBalance.pensionCreatedTime/10)*10).to.be.closeTo(Math.round(timestampBefore/10)*10,1);
       expect(ownerPensionBalance.retirentmentDate).to.be.equal(retirementDate);
       expect(ownerPensionBalance.totalSavings).to.be.equal(totalSavings);
       expect(ownerPensionBalance.totalSolidary).to.be.equal(totalSolidary);
+      expect(finalBalance).to.be.below(initBalance);
   
     })
   
@@ -121,6 +126,38 @@
       // Amount for each cutoff should match with mint and deposit amounts
       expect(monthlybalance.monthlyQuotes[0].totalAmount).to.be.equal(firstamount);
       expect(monthlybalance2.monthlyQuotes[0].totalAmount).to.be.equal(secondamount);
+    })
+
+    it("Should register a new retired", async() => {
+      const { deployed, owner, addr1 } = await setup();
+      const firstamount = 1000;
+      const secondamount = 1000;
+
+      // Mint a contributor
+      await deployed.connect(addr1).safeMint("male", 61, 1950, firstamount, { value: ethers.utils.parseUnits(firstamount.toString(),"wei") });
+      const cutoffDate1 = await deployed.cutoffDate();
+
+      // Move to next cycle
+      await new Promise(r => setTimeout(r, 3000));
+      await deployed.connect(owner).updateCutoffDate();
+      const cutoffDate2 = await deployed.connect(owner).cutoffDate();
+
+      // Current cutoff should be greater than the previous
+      expect(cutoffDate2).to.be.above(cutoffDate1);
+      await deployed.connect(addr1).depositAmount(0,secondamount,{ value: ethers.utils.parseUnits(secondamount.toString(),"wei") });
+
+      // Move to next cycle
+      await new Promise(r => setTimeout(r, 3000));
+      await deployed.connect(owner).updateCutoffDate();
+
+      const monthlybalance2 = await deployed.connect(owner).getMonthlyBalanceFromMonthlyGeneralBalance(cutoffDate2);
+      
+      // Amount for each cutoff should match with mint and deposit amounts
+      expect(monthlybalance2.monthlyQuotes[0].totalAmount).to.be.equal(secondamount);
+      let retiredBalance = await deployed.connect(owner).getRetiredRecord(cutoffDate2);
+      // Retired balance object should have the address
+      expect(retiredBalance.retairedQuotes[0].owner).to.be.eq(addr1.address);
+
     })
   
   
