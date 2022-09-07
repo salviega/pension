@@ -65,7 +65,7 @@ function PensionRegister ({ loading, setLoading }) {
           alert('You will return to the home page')
           dispatch(authRegistedAction())
           dispatch(authVerifiedAction())
-          setLoading(false)
+          setLoading(false);
 
           <Navigate replace to='/' />
         })
