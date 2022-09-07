@@ -1,37 +1,37 @@
-import { types } from '../types';
+import { types } from '../types'
 
 const initialState = {
-  isRegisted: localStorage.getItem('isRegisted') ? true : false,
-  isVerified: localStorage.getItem('isVerified') ? true : false,
-  wallet: localStorage.getItem('wallet') || 'Connect your Wallet',
-};
+  isRegisted: !!localStorage.getItem('isRegisted'),
+  isVerified: !!localStorage.getItem('isVerified'),
+  wallet: localStorage.getItem('wallet') || 'Connect your Wallet'
+}
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.authRegisted:
-      localStorage.setItem('isRegisted', 'true');
-      return { ...state, isRegisted: true };
+      localStorage.setItem('isRegisted', 'true')
+      return { ...state, isRegisted: true }
 
     case types.authUnregisted:
-      return { ...state, isRegisted: false };
+      return { ...state, isRegisted: false }
 
     case types.authVerified:
-      localStorage.setItem('isVerified', 'true');
-      return { ...state, isVerified: true };
+      localStorage.setItem('isVerified', 'true')
+      return { ...state, isVerified: true }
 
     case types.authUnverified:
-      return { ...state, isVerified: false };
+      return { ...state, isVerified: false }
 
     case types.authlogin:
-      localStorage.setItem('wallet', action.payload);
-      return { ...state, wallet: action.payload };
+      localStorage.setItem('wallet', action.payload)
+      return { ...state, wallet: action.payload }
 
     case types.authLoguot:
-      localStorage.clear();
+      localStorage.clear()
       // return { ...state, wallet: 'Connect your Wallet' };
-      return { ...initialState };
+      return { ...initialState }
 
     default:
-      return state;
+      return state
   }
-};
+}

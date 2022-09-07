@@ -2,11 +2,10 @@ import React from 'react'
 
 const PensionContext = React.createContext({
   currentUser: null
-});
+})
 
 function PensionProvider (props) {
-
-  const [items, setItems] = React.useState()
+  const [items] = React.useState()
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState(false)
 
@@ -15,7 +14,7 @@ function PensionProvider (props) {
       setLoading(false)
     } catch (error) {
       setError(error)
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -29,7 +28,7 @@ function PensionProvider (props) {
         items,
         loading,
         setLoading,
-        error,
+        error
       }}
     >
       {props.children}

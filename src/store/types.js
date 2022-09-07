@@ -19,5 +19,5 @@ export const types = {
   authVerified: '[AUTH] verifed account',
   authUnverified: '[AUTH] unverifed account',
   authlogin: '[AUTH] auth Login',
-  authLoguot: '[AUTH] auth Loguot',
-};
+  authLoguot: '[AUTH] auth Loguot'
+}

@@ -1,26 +1,26 @@
-import { types } from '../types';
+import { types } from '../types'
 
 export const authRegistedAction = () => ({
-  type: types.authRegisted,
-});
+  type: types.authRegisted
+})
 
 export const authUnregistedAction = () => ({
-  type: types.authUnregisted,
-});
+  type: types.authUnregisted
+})
 
 export const authVerifiedAction = () => ({
-  type: types.authVerified,
-});
+  type: types.authVerified
+})
 
 export const authUnverifiedAction = () => ({
-  type: types.authUnverified,
-});
+  type: types.authUnverified
+})
 
 export const authloginAction = (wallet) => ({
   type: types.authlogin,
-  payload: wallet,
-});
+  payload: wallet
+})
 
 export const authLoguotAction = () => ({
-  type: types.authLoguot,
-});
+  type: types.authLoguot
+})

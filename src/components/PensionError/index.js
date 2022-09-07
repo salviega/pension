@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
-function PensionError() {
-  return <p>Desespérate, hubo un error...</p>;
+function PensionError () {
+  return <p>Desespérate, hubo un error...</p>
 }
 
-export { PensionError };
+export { PensionError }

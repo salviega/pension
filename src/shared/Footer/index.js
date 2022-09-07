@@ -1,12 +1,12 @@
-import "./Footer.scss";
-import React from "react";
+import './Footer.scss'
+import React from 'react'
 
-function Footer() {
+function Footer () {
   return (
-    <footer className="footer">
+    <footer className='footer'>
       Made by the super team - Pension 👋
     </footer>
-  );
+  )
 }
 
-export { Footer };
+export { Footer }

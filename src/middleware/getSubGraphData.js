@@ -1,13 +1,13 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
-export function getSubGraphData() {
-  const url = 'https://api.studio.thegraph.com/query/32331/pension2/v0.0.13/';
-  
+export function getSubGraphData () {
+  const url = 'https://api.studio.thegraph.com/query/32331/pension2/v0.0.13/'
+
   const client = new ApolloClient({
     uri: url,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache()
   })
-  
+
   const queryPensionByAddress = `
     query DataPension($owner: String!) {
       dataPensions(where: {owner: $owner}) {
@@ -34,14 +34,12 @@ export function getSubGraphData() {
     }
   `
   const getPensionByAddress = async (address) => {
-    let owner = address
-    const response = await client.query({ query: gql(queryPensionByAddress), variables: {owner: address}})
+    const response = await client.query({ query: gql(queryPensionByAddress), variables: { owner: address } })
     return response.data.dataPensions[0]
   }
 
   const getAllQuotesByAddress = async (address) => {
-    let owner = address
-    const response = await client.query({ query: gql(queryAllQuotesFromAddress), variables: {owner: address}})
+    const response = await client.query({ query: gql(queryAllQuotesFromAddress), variables: { owner: address } })
     return response.data.contributorQuotes
   }
 
