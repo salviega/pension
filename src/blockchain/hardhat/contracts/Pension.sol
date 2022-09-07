@@ -5,6 +5,7 @@ pragma solidity >=0.7.0 <=0.8.14;
 import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "hardhat/console.sol";
 
 /**
  *  @title Pension
@@ -20,11 +21,11 @@ contract Pension is ERC721, KeeperCompatibleInterface {
 
     /* Constants and immutable */
     uint256 constant private femaleExpectancyLife = 365 days * 80;
-    uint256 constant private interval = 30 days; //MVP
+    uint256 constant private interval = 3; //MVP
     uint256 constant private majorityAge = 18;
     uint256 constant private maleExpectancyLife = 365 days * 85;
     uint256 constant private mininumDeposit = 25; // wai
-    uint256 constant public retirentmentAge = 365 days * 61;
+    uint256 constant public retirentmentAge = 365 days * 61; //MVP public for testing purposes
 
     /* Struct */
     struct GeneralRecord {
@@ -92,7 +93,8 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     mapping(uint256 => MonthlyRecord) private monthlyGeneralBalance;
     mapping(uint256 => RetairedRecord) private retairedBalance;
 
-    uint256 public cutoffDate;
+    uint256 public cutoffDate; // MVP public for testing purposes
+    uint256 private lastMinted; // MVP public for testing purposes
     uint256[] private withdrawPensionList;
 
     /* Modifiers */
@@ -178,20 +180,19 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         require(_age >= majorityAge, "You must be 18 years or older to generate a pension");
         uint256 age = _age * 365 days; 
         uint256 mintDate = block.timestamp; 
-
+        lastMinted = mintDate;
         uint256 pensionId = pensionIdCounter.current();
         pensionIdCounter.increment();
         _safeMint(msg.sender, pensionId);
 
         uint256 quoteTime = retirentmentAge - age; 
         uint256 retirentmentDate = mintDate + quoteTime; 
-        uint256 retirentmentCutoffDate = (((retirentmentDate - cutoffDate) / interval) * interval) + interval;
-        
+        uint256 retirentmentCutoffDate = (((retirentmentDate - cutoffDate) / interval) * interval ) + interval + mintDate;
         DataPension memory newPension = DataPension(payable(msg.sender), _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId, 0, 0);       
         
         ownerPensionsBalance[msg.sender][pensionId] = newPension;
         firstDeposit(newPension, _firstQuote);
-        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension);  
+        cutoffDateWithdrawPensionBalance[retirentmentCutoffDate].push(newPension); 
         addressesThatAlreadyMinted[msg.sender] = true;
 
         emit RegisterPension(msg.sender, _biologySex, _age, _bornAge, retirentmentDate, mintDate, pensionId);
@@ -281,7 +282,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
             } else {
                 sendMoneyToRetaired();
             } 
-
+            
             cutoffDate = block.timestamp;
             generateNewRetirentments(cutoffDate);
             MonthlyRecord storage monthlyRecord = (monthlyRecords.push());
@@ -327,7 +328,7 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */ 
     function generateNewRetirentments(uint256 _cutoffDate) private {
        DataPension[] memory cutoffDatePensionList = cutoffDateWithdrawPensionBalance[_cutoffDate];
-       for (uint256 index = 0; index > cutoffDatePensionList.length ; index++) {
+       for (uint256 index = 0; index < cutoffDatePensionList.length ; index++) {
            DataPension memory retairedPension = cutoffDatePensionList[index];
            registerRetirentment(retairedPension, _cutoffDate); 
        }
@@ -359,10 +360,10 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     */
     function calculateQuantityQuotes(string memory _biologySex) private pure returns(uint256){
         if(compareStrings(_biologySex, "male")) {
-            return (maleExpectancyLife - retirentmentAge) / 365 days / 12;
+            return ((maleExpectancyLife - retirentmentAge) / 365 days ) * 12;
         } 
         if(compareStrings(_biologySex, "female")) {
-            return (femaleExpectancyLife - retirentmentAge) / 365 days / 12;
+            return ((femaleExpectancyLife - retirentmentAge) / 365 days ) * 12;
         }
         return 0;
     }
@@ -407,11 +408,31 @@ contract Pension is ERC721, KeeperCompatibleInterface {
         return monthlyGeneralBalance[_cutoffDate];
     }
 
+    /** @dev Get retired record from date.
+     * @param _cutoffDate Monthly cut off date 
+    */
+    function getRetiredRecord(uint256 _cutoffDate) view public returns(RetairedRecord memory) {
+        return retairedBalance[_cutoffDate];
+    }
+
+    /** @dev Get retired balance.
+     * @param _cutoffDate Monthly cut off date 
+    */
+    function getCutoffDateWithdrawPensionBalance(uint256 _cutoffDate) view public returns(DataPension[] memory) {
+        return cutoffDateWithdrawPensionBalance[_cutoffDate];
+    }
+
     /** @dev Get the pensions balance of msg.sender.
      * @param _pensionId Id of pension
     */
     function getOwnerPensionsBalance(uint256 _pensionId) view public returns(DataPension memory) {
         return ownerPensionsBalance[msg.sender][_pensionId];
+    }
+
+    /** @dev Get the last minted.
+    */
+    function getLastMinted() view public returns(uint256) {
+        return lastMinted;
     }
 
     // ************************ //
