@@ -384,58 +384,6 @@ contract Pension is ERC721, KeeperCompatibleInterface {
     }
 
     // ************************ //
-    // *   Getters & Setters  * //
-    // ************************ //
-    
-    /** @dev Get general record.
-     * 
-    */
-    function getGeneralRecord() view public returns(GeneralRecord memory) {
-        return generalRecord;
-    }
-    
-    /** @dev Get total money in the contract.
-     * 
-    */
-    function totalAsserts() view public returns(uint256) {
-        return address(this).balance;
-    }
-
-    /** @dev Get monthly balance from monthly general balance.
-     * @param _cutoffDate Monthly cut off date 
-    */
-    function getMonthlyBalanceFromMonthlyGeneralBalance(uint256 _cutoffDate) view public returns(MonthlyRecord memory) {
-        return monthlyGeneralBalance[_cutoffDate];
-    }
-
-    /** @dev Get retired record from date.
-     * @param _cutoffDate Monthly cut off date 
-    */
-    function getRetiredRecord(uint256 _cutoffDate) view public returns(RetairedRecord memory) {
-        return retairedBalance[_cutoffDate];
-    }
-
-    /** @dev Get retired balance.
-     * @param _cutoffDate Monthly cut off date 
-    */
-    function getCutoffDateWithdrawPensionBalance(uint256 _cutoffDate) view public returns(DataPension[] memory) {
-        return cutoffDateWithdrawPensionBalance[_cutoffDate];
-    }
-
-    /** @dev Get the pensions balance of msg.sender.
-     * @param _pensionId Id of pension
-    */
-    function getOwnerPensionsBalance(uint256 _pensionId) view public returns(DataPension memory) {
-        return ownerPensionsBalance[msg.sender][_pensionId];
-    }
-
-    /** @dev Get the last minted.
-    */
-    function getLastMinted() view public returns(uint256) {
-        return lastMinted;
-    }
-
-    // ************************ //
     // *        Utils         * //
     // ************************ //
     
